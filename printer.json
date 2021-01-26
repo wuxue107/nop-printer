@@ -1,5 +1,0 @@
-{
-  "printer" : "PDFwriter",
-  "PrintConnectorClass" :"Mike42\\Escpos\\PrintConnectors\\CupsPrintConnector",
-  "CapabilityProfile" : ""
-}
