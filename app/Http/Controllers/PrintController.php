@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Request;
 class PrintController extends Controller
 {
 
+    public function getLocalPrinters(){
+        $printers = PrinterHelper::getLocalPrinters();
+
+        return Helper::successMsg(["list" => $printers]);
+    }
+
     /**
      * 打印图片
      */

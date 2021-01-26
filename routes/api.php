@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('print')->group(function(){
     Route::post('print-image-data-url',[\App\Http\Controllers\PrintController::class, 'printImageDataUrl']);
+    Route::get('get-local-printers',[\App\Http\Controllers\PrintController::class, 'getLocalPrinters']);
 });
 

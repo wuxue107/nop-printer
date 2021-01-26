@@ -1,11 +1,9 @@
 <?php
 namespace App\Helpers;
 
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\ProcessUtils;
 use Mike42\Escpos\CapabilityProfile;
-use Mike42\Escpos\GdEscposImage;
-
 
 class PrinterHelper
 {
@@ -40,7 +38,54 @@ class PrinterHelper
         return $printer;
     }
 
-    public static function searchPrinter(){
 
+    public static function getFile($glob){
+        $matches = File::glob();
+        if(empty($matches)){
+            throw new \Exception("无法找到文件:{$glob}");
+        }
+
+        return $matches[0];
+    }
+
+    public static function getLocalPrinters(){
+        $printersInfo = mb_convert_encoding(shell_exec('wmic printer list /format'),'UTF-8','GBK');
+        $lines = explode(PHP_EOL,$printersInfo);
+        $printers = [];
+        $row = [];
+        foreach($lines as $line){
+            $line = trim($line);
+            if($line === ""){
+                if(!empty($row)){
+                    $printers[] = $row;
+                    $row = [];
+                }
+                continue;
+            }
+
+            $item = explode('=',trim($line),2);
+            if(!isset($item[1])){
+                var_dump($item);exit;
+            }
+            $row[$item[0]] = $item[1];
+        }
+        if(!empty($row)){
+            $printers[] = $row;
+        }
+
+        return $printers;
+    }
+
+    public static function sharePrinter($printerName){
+        $prncnfgFile = self::getFile("C:\\Windows\\System32\\Printing_Admin_Scripts\\*\\prncnfg.vbs");
+        $cmd = 'cscript ' . ProcessUtils::escapeArgument($prncnfgFile) . ' -t -p "'.ProcessUtils::escapeArgument($printerName).'" -h "POS-58" +shared';
+        system($cmd,$ret);
+
+        return $ret == 0;
+    }
+
+    public static function setDefaultPrinter($printerName){
+        system('rundll32 printui.dll,PrintUIEntry /y /n ' . ProcessUtils::escapeArgument($printerName),$ret);
+        return $ret == 0;
     }
 }
