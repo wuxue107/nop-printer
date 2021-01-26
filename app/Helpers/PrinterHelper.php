@@ -1,5 +1,5 @@
 <?php
-namespace app\Helpers;
+namespace App\Helpers;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -26,7 +26,13 @@ class PrinterHelper
         $config = self::getConfig();
         $printConnectorClass = $config['PrintConnectorClass'];
         $connector = new $printConnectorClass($config["printer"]);
-        $profile = CapabilityProfile::load($config["CapabilityProfile"]);
+
+        if(empty($config["CapabilityProfile"])){
+            $profile = null;
+        }else{
+            $profile = CapabilityProfile::load($config["CapabilityProfile"]);
+        }
+
 
         /* Print a "Hello world" receipt" */
         $printer = new NopPrinter($connector,$profile);

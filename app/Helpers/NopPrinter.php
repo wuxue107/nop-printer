@@ -1,5 +1,5 @@
 <?php
-namespace app\Helpers;
+namespace App\Helpers;
 
 use http\Exception\InvalidArgumentException;
 use Mike42\Escpos\CapabilityProfile;

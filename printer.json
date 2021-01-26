@@ -1,5 +1,5 @@
 {
-  "printer" : "POS-58",
-  "PrintConnectorClass" :"Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector",
-  "CapabilityProfile" : "POS-5890"
+  "printer" : "PDFwriter",
+  "PrintConnectorClass" :"Mike42\\Escpos\\PrintConnectors\\CupsPrintConnector",
+  "CapabilityProfile" : ""
 }

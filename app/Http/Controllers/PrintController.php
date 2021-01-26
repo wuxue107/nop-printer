@@ -8,8 +8,8 @@
 
 namespace App\Http\Controllers;
 
-use app\Helpers\Helper;
-use app\Helpers\PrinterHelper;
+use App\Helpers\Helper;
+use App\Helpers\PrinterHelper;
 use App\Http\Controllers\Controller;
 use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Facades\Request;
