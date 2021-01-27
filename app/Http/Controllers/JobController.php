@@ -14,8 +14,13 @@ use App\Http\Controllers\Controller;
 use http\Exception\InvalidArgumentException;
 use Illuminate\Support\Facades\Request;
 
-class PrintController extends Controller
+class JobController extends Controller
 {
+
+    public function setting(){
+
+        return view('printer-setting', ['name' => 'James']);
+    }
 
     public function getLocalPrinters(){
         $printers = PrinterHelper::getLocalPrinters();

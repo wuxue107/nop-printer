@@ -18,8 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('print')->group(function(){
-    Route::post('print-image-data-url',[\App\Http\Controllers\PrintController::class, 'printImageDataUrl']);
-    Route::get('get-local-printers',[\App\Http\Controllers\PrintController::class, 'getLocalPrinters']);
+Route::prefix('job')->group(function(){
+    Route::post('print-image-data-url',[\App\Http\Controllers\JobController::class, 'printImageDataUrl']);
+});
+
+Route::prefix('printer')->group(function(){
+    Route::get('get-local-printers',[\App\Http\Controllers\PrinterController::class, 'getLocalPrinters']);
 });
 

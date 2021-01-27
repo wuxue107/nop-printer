@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/printer-setting',function(){
+    return view('printer-setting', ['name' => 'James']);
+});
