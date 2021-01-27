@@ -20,6 +20,12 @@ class PrinterHelper
         return $config;
     }
 
+    public static function setConfig($config){
+        $configFile = base_path('printer.json');;
+
+        return file_put_contents($configFile,json_encode($config,JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    }
+
     public static function getPrinter(){
         $config = self::getConfig();
         $printConnectorClass = $config['PrintConnectorClass'];
@@ -76,9 +82,9 @@ class PrinterHelper
         return $printers;
     }
 
-    public static function sharePrinter($printerName){
+    public static function sharePrinter($printerName,$shareName){
         $prncnfgFile = self::getFile("C:\\Windows\\System32\\Printing_Admin_Scripts\\*\\prncnfg.vbs");
-        $cmd = 'cscript ' . ProcessUtils::escapeArgument($prncnfgFile) . ' -t -p "'.ProcessUtils::escapeArgument($printerName).'" -h "POS-58" +shared';
+        $cmd = 'cscript ' . ProcessUtils::escapeArgument($prncnfgFile) . ' -t -p '.ProcessUtils::escapeArgument($printerName).' -h '.ProcessUtils::escapeArgument($shareName).' +shared';
         system($cmd,$ret);
 
         return $ret == 0;

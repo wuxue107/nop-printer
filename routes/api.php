@@ -24,5 +24,6 @@ Route::prefix('job')->group(function(){
 
 Route::prefix('printer')->group(function(){
     Route::get('get-local-printers',[\App\Http\Controllers\PrinterController::class, 'getLocalPrinters']);
+    Route::post('set-default-printer',[\App\Http\Controllers\PrinterController::class, 'setDefaultPrinter']);
 });
 

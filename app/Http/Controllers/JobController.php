@@ -17,17 +17,6 @@ use Illuminate\Support\Facades\Request;
 class JobController extends Controller
 {
 
-    public function setting(){
-
-        return view('printer-setting', ['name' => 'James']);
-    }
-
-    public function getLocalPrinters(){
-        $printers = PrinterHelper::getLocalPrinters();
-
-        return Helper::successMsg(["list" => $printers]);
-    }
-
     /**
      * 打印图片
      */
