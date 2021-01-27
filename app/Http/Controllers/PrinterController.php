@@ -36,7 +36,7 @@ class PrinterController extends Controller
         }
 
         $defaultPrinter = [
-            "printer" => $printer_name,
+            "PrinterName" => $printer_name,
             "ShareName" => "",
             "ServerName" => "",
             "PrintConnectorClass" =>"",

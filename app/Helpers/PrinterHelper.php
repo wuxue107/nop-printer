@@ -29,7 +29,7 @@ class PrinterHelper
     public static function getPrinter(){
         $config = self::getConfig();
         $printConnectorClass = $config['PrintConnectorClass'];
-        $connector = new $printConnectorClass($config["printer"]);
+        $connector = new $printConnectorClass($config["PrinterName"]);
 
         if(empty($config["CapabilityProfile"])){
             $profile = null;
