@@ -46,15 +46,14 @@ class PrinterController extends Controller
 
         $defaultPrinter['ShareName'] = $printerInfo['ShareName']??"";
         $defaultPrinter['ServerName'] = $printerInfo['ServerName']??"";
-        if(!windows_os()){
+        if(windows_os()){
             $defaultPrinter['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
-            if($defaultPrinter['ShareName'] === ""){
-                if(!PrinterHelper::sharePrinter($printer_name,$printer_name)){
-                    return Helper::failMsg("设置共享打印机：{$printer_name} 失败");
-                }
 
-                $defaultPrinter['ShareName'] = $printer_name;
+            if(!PrinterHelper::sharePrinter($printer_name,$printer_name)){
+                return Helper::failMsg("设置共享打印机：{$printer_name} 失败");
             }
+
+            $defaultPrinter['ShareName'] = $printer_name;
         }
 
         if(!PrinterHelper::setConfig($defaultPrinter)){

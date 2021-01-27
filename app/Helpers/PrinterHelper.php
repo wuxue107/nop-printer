@@ -46,7 +46,7 @@ class PrinterHelper
 
 
     public static function getFile($glob){
-        $matches = File::glob();
+        $matches = File::glob($glob);
         if(empty($matches)){
             throw new \Exception("无法找到文件:{$glob}");
         }
@@ -85,13 +85,17 @@ class PrinterHelper
     public static function sharePrinter($printerName,$shareName){
         $prncnfgFile = self::getFile("C:\\Windows\\System32\\Printing_Admin_Scripts\\*\\prncnfg.vbs");
         $cmd = 'cscript ' . ProcessUtils::escapeArgument($prncnfgFile) . ' -t -p '.ProcessUtils::escapeArgument($printerName).' -h '.ProcessUtils::escapeArgument($shareName).' +shared';
-        system($cmd,$ret);
+        shell_exec($cmd);
+    }
 
-        return $ret == 0;
+    public static function printerIsShared($shareName){
+        $cmd = 'wmic share get Name';
+        $shareNames = explode(PHP_EOL,shell_exec($cmd));
+
+        return in_array($shareName,$shareNames);
     }
 
     public static function setDefaultPrinter($printerName){
-        system('rundll32 printui.dll,PrintUIEntry /y /n ' . ProcessUtils::escapeArgument($printerName),$ret);
-        return $ret == 0;
+        shell_exec('rundll32 printui.dll,PrintUIEntry /y /n ' . ProcessUtils::escapeArgument($printerName));
     }
 }
