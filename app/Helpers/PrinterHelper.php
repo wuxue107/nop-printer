@@ -90,8 +90,7 @@ class PrinterHelper
 
     public static function printerIsShared($shareName){
         $cmd = 'wmic share get Name';
-        $shareNames = explode(PHP_EOL,shell_exec($cmd));
-
+        $shareNames = array_map('trim',explode(PHP_EOL,shell_exec($cmd)));
         return in_array($shareName,$shareNames);
     }
 
