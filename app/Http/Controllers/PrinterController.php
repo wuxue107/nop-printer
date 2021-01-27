@@ -39,7 +39,7 @@ class PrinterController extends Controller
             "printer" => $printer_name,
             "ShareName" => "",
             "ServerName" => "",
-            "PrintConnectorClass" =>"Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector",
+            "PrintConnectorClass" =>"",
             "CapabilityProfile" => "",
         ];
         $printerInfo = $printerInfos[$printer_name];
