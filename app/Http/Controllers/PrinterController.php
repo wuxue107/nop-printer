@@ -35,22 +35,21 @@ class PrinterController extends Controller
         if(!isset($printerInfos[$printer_name])){
             return Helper::failMsg("找不到此打印机");
         }
-
+        $printerInfo = $printerInfos[$printer_name];
         $printerConfig = [
-            "PrinterName" => $printer_name,
+            "Name" => $printer_name,
             "ShareName" => "",
             "ServerName" => "",
             "PrintConnectorClass" =>"",
             "CapabilityProfile" => "",
         ];
-        $printerInfo = $printerInfos[$printer_name];
 
-        $printerConfig['ShareName'] = $printerInfo['ShareName']??"";
+        $printerConfig['ShareName'] = $printerInfo['ShareName']??$printer_name;
         $printerConfig['ServerName'] = $printerInfo['ServerName']??"";
         if(windows_os()){
             $printerConfig['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
 
-            PrinterHelper::sharePrinter($printer_name,$printer_name);
+            PrinterHelper::sharePrinter($printer_name,$printerConfig['ShareName']);
             if(!PrinterHelper::printerIsShared($printer_name)){
                 return Helper::failMsg("设置共享打印机：{$printer_name} 失败");
             }
