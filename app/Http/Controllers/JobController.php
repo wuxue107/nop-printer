@@ -21,6 +21,7 @@ class JobController extends Controller
      * 打印图片
      */
     public function printImageDataUrl(){
+        set_time_limit(10);
         $imageData = Request::json("image_data");
         if(empty($imageData)){
             return Helper::failMsg("无效的参数");
