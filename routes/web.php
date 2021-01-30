@@ -18,5 +18,5 @@ Route::get('/', function () {
 });
 
 Route::get('/printer-setting',function(){
-    return view('printer-setting', ['name' => 'James']);
+    return view('printer-setting', []);
 });

@@ -22,6 +22,12 @@ class PrinterController extends Controller
         return view('printer-setting', ['name' => 'James']);
     }
 
+    public function getConfig(){
+        $config = PrinterHelper::loadConfig();
+
+        return Helper::successMsg($config);
+    }
+
     public function setPrinterConfig(){
         $printer_name = Request::json("printer_name");
         $is_default = Request::json("is_default");
