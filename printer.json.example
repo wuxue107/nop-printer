@@ -2,7 +2,7 @@
     "default" : "POS-58",
     "printers" : {
         "POS-58" : {
-            "printer": "POS-58",
+            "Name": "POS-58",
             "ShareName": "POS-58",
             "ServerName": "",
             "PrintConnectorClass": "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector",

@@ -70,7 +70,7 @@ class PrinterHelper
         $printerConfig = self::getPrinterConfig();
 
         $printConnectorClass = $printerConfig['PrintConnectorClass'];
-        $connector = new $printConnectorClass($printerConfig["PrinterName"]);
+        $connector = new $printConnectorClass($printerConfig["ShareName"]);
         if(empty($printerConfig["CapabilityProfile"])) {
             $profile = null;
         }
