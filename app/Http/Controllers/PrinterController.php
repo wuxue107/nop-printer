@@ -22,8 +22,9 @@ class PrinterController extends Controller
         return view('printer-setting', ['name' => 'James']);
     }
 
-    public function setDefaultPrinter(){
+    public function setPrinterConfig(){
         $printer_name = Request::json("printer_name");
+        $is_default = Request::json("is_default");
         if(empty($printer_name)){
             return Helper::failMsg("无效的参数");
         }
@@ -35,7 +36,7 @@ class PrinterController extends Controller
             return Helper::failMsg("找不到此打印机");
         }
 
-        $defaultPrinter = [
+        $printerConfig = [
             "PrinterName" => $printer_name,
             "ShareName" => "",
             "ServerName" => "",
@@ -44,20 +45,20 @@ class PrinterController extends Controller
         ];
         $printerInfo = $printerInfos[$printer_name];
 
-        $defaultPrinter['ShareName'] = $printerInfo['ShareName']??"";
-        $defaultPrinter['ServerName'] = $printerInfo['ServerName']??"";
+        $printerConfig['ShareName'] = $printerInfo['ShareName']??"";
+        $printerConfig['ServerName'] = $printerInfo['ServerName']??"";
         if(windows_os()){
-            $defaultPrinter['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
+            $printerConfig['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
 
             PrinterHelper::sharePrinter($printer_name,$printer_name);
             if(!PrinterHelper::printerIsShared($printer_name)){
                 return Helper::failMsg("设置共享打印机：{$printer_name} 失败");
             }
 
-            $defaultPrinter['ShareName'] = $printer_name;
+            $printerConfig['ShareName'] = $printer_name;
         }
 
-        if(!PrinterHelper::setConfig($defaultPrinter)){
+        if(!PrinterHelper::setPrinterConfig($printerConfig,$is_default)){
             return Helper::failMsg("保存配置文件失败");
         }
 
