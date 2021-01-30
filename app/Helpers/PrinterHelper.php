@@ -8,7 +8,7 @@ use Mike42\Escpos\CapabilityProfile;
 
 class PrinterHelper
 {
-    public static function loadConfig()
+    public static function configLoad()
     {
         $configFile = base_path('printer.json');;
         if(!is_file($configFile)) {
@@ -22,16 +22,16 @@ class PrinterHelper
         return $config;
     }
 
-    public static function storeConfig($config)
+    public static function configStore($config)
     {
         $configFile = base_path('printer.json');;
 
         return file_put_contents($configFile, json_encode($config, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
     }
 
-    public static function getPrinterConfig($printerName = null)
+    public static function configGetPrinter($printerName = null)
     {
-        $config = self::loadConfig();
+        $config = self::configLoad();
         if(is_null($printerName)) {
             if(is_null($config['default'])) {
                 throw new \Exception("未配置默认的打印机");
@@ -48,10 +48,10 @@ class PrinterHelper
         return $printerConfig;
     }
 
-    public static function setPrinterConfig($printerConfig, $isDefault = false)
+    public static function configSetPrinter($printerConfig, $isDefault = false)
     {
         $printerName = $printerConfig['Name'];
-        $config = self::loadConfig();
+        $config = self::configLoad();
         if(empty($config['default']) || $isDefault){
             $config['default'] = $printerName;
         }
@@ -62,12 +62,22 @@ class PrinterHelper
 
         $config['printers'][$printerName] = $printerConfig;
 
-        return self::storeConfig($config);
+        return self::configStore($config);
+    }
+
+    public static function configRemovePrinter($printerName){
+        $config = self::configLoad();
+        unset($config['printers'][$printerName]);
+        if($config['default'] === $printerName){
+            $config['default'] = null;
+        }
+
+        return self::configStore($config);
     }
 
     public static function getPrinter()
     {
-        $printerConfig = self::getPrinterConfig();
+        $printerConfig = self::configGetPrinter();
 
         $printConnectorClass = $printerConfig['PrintConnectorClass'];
         $connector = new $printConnectorClass($printerConfig["ShareName"]);

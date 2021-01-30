@@ -23,7 +23,7 @@ class PrinterController extends Controller
     }
 
     public function getConfig(){
-        $config = PrinterHelper::loadConfig();
+        $config = PrinterHelper::configLoad();
 
         return Helper::successMsg($config);
     }
@@ -63,13 +63,22 @@ class PrinterController extends Controller
             $printerConfig['ShareName'] = $printer_name;
         }
 
-        if(!PrinterHelper::setPrinterConfig($printerConfig,$is_default)){
+        if(!PrinterHelper::configSetPrinter($printerConfig,$is_default)){
             return Helper::failMsg("保存配置文件失败");
         }
 
         return Helper::successMsg();
     }
 
+    public function removePrinterConfig(){
+        $printer_name = Request::json("printer_name");
+
+        if(!PrinterHelper::configRemovePrinter($printer_name)){
+            return Helper::failMsg();
+        }
+
+        return Helper::successMsg();
+    }
     public function getLocalPrinters(){
         $printers = PrinterHelper::getLocalPrinters();
 
