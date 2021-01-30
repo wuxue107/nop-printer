@@ -40,7 +40,7 @@ class PrinterHelper
             $printerName = $config['default'];
         }
 
-        $printerConfig = $config[$printerName] ?? null;
+        $printerConfig = $config['printers'][$printerName] ?? null;
         if(is_null($printerConfig)) {
             throw new \Exception("打印机:{$printerName} 缺失配置信息");
         }
