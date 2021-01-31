@@ -23,6 +23,13 @@
 </script>
 <div class="contenter">
     <div class="col-sm-8 col-sm-offset-2">
+        <h3>使用说明：</h3>
+        <div class="alert alert-success" role="alert">
+            <p>在操作之前，请先在安装好小票打印机及驱动。</p>
+            <p>1.添加打印机：选择安装的小票打印机，点击“+”号<br>如果列表内为空，则新添加的打印机会成为默认打印机。<br>注意:“虚拟打印机”是无法添加的 </p>
+            <p>2.点击打印测试页，会跳转到预览页，点击右侧，打印按钮。</p>
+
+        </div>
         <div class="bs-bars pull-left">
             <div id="toolbar">
 
@@ -37,6 +44,11 @@
                     </a>
                     <a class="btn btn-outline btn-default new-tab" id="add-printer" data-title="添加">
                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-outline btn-success new-tab" target="_blank" href="/eazy-ticket.html">
+                        打印测试页
                     </a>
                 </div>
             </div>
