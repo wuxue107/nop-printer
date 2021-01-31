@@ -1,4 +1,18 @@
 Helper ={
+    postJson : function(url,data,callback,dataType){
+        dataType = dataType || 'json';
+
+        return $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: dataType,
+            data: JSON.stringify(data),
+            headers : {
+                "Content-Type" : "application/json"
+            },
+            success: callback
+        })
+    },
     operation: function (items,isStyleBtn) {
         var text = '<div class="operation btn-group pull-right '+ (isStyleBtn?'style-btn':'') +' ">' +
             '<button id="w2" class="btn btn-default btn-xs dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="true">' +
@@ -90,28 +104,23 @@ Helper ={
     },
 
     /** 删除子节点，该行记录 **/
-    deleteRow: function (el,url) {
+    deleteRow: function (el,callback) {
         el = $(el);
-        if(!url) url = el.attr('href');
-        if(!url) url = el.data('url');
-
         var tableInfo = Helper.getTableInfo(el);
         if(!tableInfo.currentRowId){
             return false;
         }
 
         var layerIndex = layer.confirm("确认要删除此条记录吗？", function () {
-            var data = {};
-            Helper.postApi(url, data,function (d) {
+            var deleteFun = function () {
                 layer.close(layerIndex);
-                layer.msg(d.msg);
-                if(d.code == 0){
-                    tableInfo.table.bootstrapTable('remove', {
-                        field: tableInfo.idField,
-                        values: [tableInfo.currentRowId]
-                    });
-                }
-            },"json");
+                tableInfo.table.bootstrapTable('remove', {
+                    field: tableInfo.idField,
+                    values: [tableInfo.currentRowId]
+                });
+            };
+
+            callback(deleteFun,tableInfo.currentRowId,tableInfo.currentRowData)
         });
 
         return false;

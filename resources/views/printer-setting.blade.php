@@ -19,21 +19,32 @@
 <body>
 
 <script>
+   localPrinters = {!! json_encode($localPrinters) !!};
 </script>
 <div class="contenter">
-    <div class="col-sm-12">
+    <div class="col-sm-8 col-sm-offset-2">
         <div class="bs-bars pull-left">
             <div id="toolbar">
+
                 <div class="btn-group" id="exampleTableEventsToolbar" role="group">
-                    <button id="batch_remove" type="button" class="btn btn-outline btn-default">
-                        <i class="glyphicon glyphicon-trash" aria-hidden="true"></i>
-                    </button>
+                    <a class="btn btn-outline btn-default new-tab">
+                        添加打印机：
+                    </a>
+                    <a class="btn btn-default" style="width: 200px">
+                        <select id="localPrinterInput" class="" name="type" style="border: none;width: 100%">
+                            <option value=""> - 选择打印机 - </option>
+                        </select>
+                    </a>
+                    <a class="btn btn-outline btn-default new-tab" id="add-printer" data-title="添加">
+                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                    </a>
                 </div>
             </div>
         </div>
         <div id="extend_filter" class="fixed-table-toolbar">
         </div>
         <script>
+
             $(function () {
                 $table.closest('.bootstrap-table').find('.fixed-table-toolbar>.search,.fixed-table-toolbar>.btn-group').last().after($('#extend_filter'));
             })
@@ -42,7 +53,7 @@
                data-method="get"
                data-mobile-responsive="true"
                data-response-handler="bootstrapTableResponseHandler"
-               data-id-field="name"
+               data-id-field="Name"
                data-query-params="queryParams"
                data-toolbar="#toolbar"
                data-striped="true"
@@ -51,8 +62,8 @@
                data-pagination="false" data-side-pagination="server" data-page-size="30">
             <thead>
             <tr>
-                <th data-field="Name" data-width="200px" data-sortable="true" data-formatter="<span>%s</span>">打印机名称</th>
-                <th data-field="isDefault" data-width="300px" data-sortable="true" data-formatter="<span>%s</span>">是否默认</th>
+                <th data-field="Name" data-width="200px" data-formatter="<span>%s</span>">打印机名称</th>
+                <th data-field="isDefault" data-width="80px" data-formatter="<span>%s</span>">是否默认</th>
 
                 <th data-width="100" data-formatter="columnFormatter.operation">操作</th>
             </tr>
@@ -83,10 +94,27 @@
         return params;
     }
 
+    function deletePrinter(el){
+        Helper.deleteRow(el,function(deleteFunc,id,rowData){
+            Helper.postJson('/api/printer/remove-printer-config',{printer_name: id}).then(function(d){
+                layer.msg(d.msg);
+                $table.bootstrapTable('refresh');
+            })
+        })
+    }
+
+    function defaultPrinter(el){
+        var id = Helper.getRowId(el);
+        Helper.postJson('/api/printer/set-printer-config',{printer_name: id,is_default : 1}).then(function(d){
+            layer.msg(d.msg);
+            $table.bootstrapTable('refresh');
+        })
+    }
+
     columnFormatter = {
         operation: function (v, row, index) {
-
-             return '<a onclick="Helper.deleteRow(this);return false;" class="btn btn-sm btn-danger" href="" tabindex="-1">删除</a>';
+             return '<button onclick="deletePrinter(this);return false;" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
+                + (row.isDefault?'':'<button onclick="defaultPrinter(this);return false;" style="margin: 0 10px" class="btn btn-sm btn-success" tabindex="-1">设为默认</button>');
         }
     };
 
@@ -101,6 +129,26 @@
         {
             height: tableHeight()
         });
+
+    var localPrinterEl = $('#localPrinterInput');
+    $('#add-printer').click(function(){
+        var selectValue = localPrinterEl.val();
+        if(selectValue === ""){
+            return;
+        }
+
+        Helper.postJson('/api/printer/set-printer-config',{
+            printer_name : selectValue
+        }).then(function(d){
+            layer.msg(d.msg);
+            $table.bootstrapTable('refresh');
+        })
+    });
+
+    $(localPrinters).each(function(){
+        return $('<option value="'+this.Name+'">'+this.Name+'</option>').data(this).appendTo(localPrinterEl);
+    });
+
 
     $(function () {
         $('.filter-query').change(function () {

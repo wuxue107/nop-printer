@@ -18,5 +18,6 @@ Route::get('/', function () {
 });
 
 Route::get('/printer-setting',function(){
-    return view('printer-setting', []);
+    $localPrinters = \App\Helpers\PrinterHelper::getLocalPrinters();
+    return view('printer-setting', ['localPrinters' => $localPrinters]);
 });
