@@ -32,7 +32,7 @@ class PrinterHelper
     public static function configGetPrinter($printerName = null)
     {
         $config = self::configLoad();
-        if(is_null($printerName)) {
+        if(empty($printerName)) {
             if(is_null($config['default'])) {
                 throw new \Exception("未配置默认的打印机");
             }
@@ -75,9 +75,9 @@ class PrinterHelper
         return self::configStore($config);
     }
 
-    public static function getPrinter()
+    public static function getPrinter($printerName)
     {
-        $printerConfig = self::configGetPrinter();
+        $printerConfig = self::configGetPrinter($printerName);
 
         $printConnectorClass = $printerConfig['PrintConnectorClass'];
         $connector = new $printConnectorClass($printerConfig["ShareName"]);

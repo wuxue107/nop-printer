@@ -23,6 +23,7 @@ class JobController extends Controller
     public function printImageDataUrl(){
         set_time_limit(10);
         $imageData = Request::json("image_data");
+        $printerName = Request::json("printer_name");
         if(empty($imageData)){
             return Helper::failMsg("无效的参数");
         }
@@ -38,7 +39,7 @@ class JobController extends Controller
         Helper::writeRuntimeFile($file,$content);
         $fullPath = Helper::getRuntimePath($file);
 
-        $printer = PrinterHelper::getPrinter();
+        $printer = PrinterHelper::getPrinter($printerName);
         $printer->printImage($fullPath);
         $printer->cut();
         $printer->close();
