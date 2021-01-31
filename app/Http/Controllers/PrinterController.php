@@ -57,7 +57,10 @@ class PrinterController extends Controller
 
             PrinterHelper::sharePrinter($printer_name,$printerConfig['ShareName']);
             if(!PrinterHelper::printerIsShared($printer_name)){
-                return Helper::failMsg("打印机：{$printer_name} 无法设置为共享");
+                PrinterHelper::sharePrinter($printer_name,$printerConfig['ShareName']);
+                if(!PrinterHelper::printerIsShared($printer_name)){
+                    return Helper::failMsg("打印机：{$printer_name} 无法设置为共享");
+                }
             }
 
             $printerConfig['ShareName'] = $printer_name;
