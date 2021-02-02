@@ -85,18 +85,14 @@
 </div>
 <script type="text/javascript">
     var loadingId;
-    $.ajaxSetup({
-        beforeSend : function () {
-            loadingId = layer.load(1, {
-                shade: [0.1,'#fff'] //0.1透明度的白色背景
-            });
-        },
-        error : function(){
-            layer.close(loadingId)
-        },
-        success : function () {
-            layer.close(loadingId)
-        }
+    $(document).ajaxSend(function () {
+        loadingId = layer.load(1, {
+            shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
+    }).ajaxStop(function(){
+        layer.close(loadingId);
+    }).ajaxComplete(function(){
+        layer.close(loadingId);
     });
 
     function bootstrapTableResponseHandler(res) {
