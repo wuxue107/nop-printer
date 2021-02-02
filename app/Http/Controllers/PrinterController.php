@@ -29,6 +29,7 @@ class PrinterController extends Controller
     }
 
     public function setPrinterConfig(){
+        set_time_limit(60);
         $printer_name = Request::json("printer_name");
         $is_default = Request::json("is_default");
         if(empty($printer_name)){
