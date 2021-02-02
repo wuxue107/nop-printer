@@ -141,6 +141,7 @@ class PrinterHelper
     {
         $prncnfgFile = self::getFile("C:\\Windows\\System32\\Printing_Admin_Scripts\\*\\prncnfg.vbs");
         $cmd = 'cscript ' . ProcessUtils::escapeArgument($prncnfgFile) . ' -t -p ' . ProcessUtils::escapeArgument($printerName) . ' -h ' . ProcessUtils::escapeArgument($shareName) . ' +shared';
+        Helper::writeLog("设置打印机共享：" . $cmd);
         shell_exec($cmd);
     }
 
