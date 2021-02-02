@@ -16,7 +16,10 @@ class PrinterHelper
         }
         $config = @json_decode(file_get_contents($configFile), true);
         if(json_last_error() !== JSON_ERROR_NONE || !is_array($config)) {
-            return [];
+            return [
+                'default' => null,
+                'printers' => [],
+            ];
         }
 
         return $config;
@@ -56,7 +59,7 @@ class PrinterHelper
             $config['default'] = $printerName;
         }
 
-        if(!is_array($config['printers'])){
+        if(empty($config['printers'])){
             $config['printers'] = [];
         }
 
