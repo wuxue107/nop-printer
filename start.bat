@@ -3,4 +3,4 @@
 set SCRIPT_PATH=%~dp0
 cd %SCRIPT_PATH%
 
-php artisan serve
+php artisan serve --port=8077

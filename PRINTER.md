@@ -1,3 +1,7 @@
+# chrome 直接打印模式
+chrome  --kiosk --kiosk-printing
+调用window.print(); 直接使用默认打印机打印，不跳预览
+
 ## 弹出打印机属性
 rundll32 printui.dll ,PrintUIEntry /p /n "POS-58"
 
