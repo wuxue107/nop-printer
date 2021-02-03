@@ -76,7 +76,7 @@
                 el.height(oldHeight)
                 // book.css('zoom',0.65);
 
-                postJson("http://localhost:8000/api/job/print-image-data-url",{image_data:imageData})
+                postJson("http://localhost:8077/api/job/print-image-data-url",{image_data:imageData})
                     .error(function(){
                         alert("链接打印服务失败");
                     });
