@@ -6,7 +6,7 @@
 ## 打开打印机配置页（或使用下面的接口调用进行配置）
 
 
-- http://localhost:8000/printer-setting
+- http://localhost:8077/printer-setting
 ![alt](./printer-setting.png)
 ![alt](./printer-test.jpg)
 
@@ -24,13 +24,13 @@
 
 - 获取所有打印机
 ```
-GET http://localhost:8000/api/printer/get-local-printers
+GET http://localhost:8077/api/printer/get-local-printers
 ```
 
 
 - 配置添加的小票打印机
 ```$xslt
-POST http://localhost:8000/api/printer/set-printer
+POST http://localhost:8077/api/printer/set-printer
 参数：JSON
 {"printer_name":"POS-58","is_default":true}
 ```
@@ -41,7 +41,7 @@ POST http://localhost:8000/api/printer/set-printer
 测试页就是使用html转canvas图片进行打印的
 
 ```
-POST http://localhost:8000/api/job/print-image-data-url
+POST http://localhost:8077/api/job/print-image-data-url
 参数：JSON
 printer_name: 可以不传或为空，则使用默认打印机
 {"printer_name":"POS-58","image_data":"data:image/png;base64,..."}
