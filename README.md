@@ -27,14 +27,7 @@
 
 2.点击打印测试页，会跳转到预览页，点击右侧，打印按钮。
 ```
-
-## 启动服务
-    运行:printer-start.bat
-
-## 停止服务
-    运行:printer-stop.bat
-
-## 从接口进行配置打印机
+    
 - 获取所有打印机
 ```
 GET http://localhost:8077/api/printer/get-local-printers
@@ -61,9 +54,16 @@ printer_name: 可以不传或为空，则使用默认打印机
 ```
 
 
-## 启动项目
-运行：start.bat
+## 启动服务
+    运行:printer-start.bat
 
+## 停止服务
+    运行:printer-stop.bat
 
+## 注册系统服务启动项
+    运行:system-service register
+    
+## 注销系统服务启动项
+    运行:system-service unregister
 
 
