@@ -1,6 +1,5 @@
 ::
 :: Open then printer setting url
-:: 打开打印机设置界面
 ::
 
 timeout /T 3

@@ -2,7 +2,6 @@
 
 ::
 :: start the api service
-:: 启动打印机API服务
 ::
 
 

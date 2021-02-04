@@ -2,7 +2,6 @@
 
 ::
 :: register system service in to windows. & Boot up
-:: 注册系统服务并开机启动
 ::
 set ACTION=%1
 set SCRIPT_PATH=%~dp0

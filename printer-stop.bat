@@ -2,7 +2,6 @@
 
 ::
 :: stop the api service
-:: 停止打印机API服务
 ::
 
 set SCRIPT_PATH=%~dp0
