@@ -85,7 +85,11 @@ class PrinterHelper
         $printerConfig = self::configGetPrinter($printerName);
 
         $printConnectorClass = $printerConfig['PrintConnectorClass'];
-        $connector = new $printConnectorClass($printerConfig["ShareName"]);
+        $connectName = $printerConfig["Name"];
+        if(strpos($connectName,'\\\\') === 0){
+            $connectName = 'smb:' . str_replace('\\','/',$connectName);
+        }
+        $connector = new $printConnectorClass($connectName);
         if(empty($printerConfig["CapabilityProfile"])) {
             $profile = null;
         }
