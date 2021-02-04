@@ -10,16 +10,18 @@ class PrinterHelper
 {
     public static function configLoad()
     {
+        $defaultConfig = [
+            'default' => null,
+            'printers' => [],
+        ];
         $configFile = base_path('printer.json');;
         if(!is_file($configFile)) {
-            return [];
+            return $defaultConfig;
         }
+
         $config = @json_decode(file_get_contents($configFile), true);
         if(json_last_error() !== JSON_ERROR_NONE || !is_array($config)) {
-            return [
-                'default' => null,
-                'printers' => [],
-            ];
+            return $defaultConfig;
         }
 
         return $config;
@@ -37,7 +39,7 @@ class PrinterHelper
         $config = self::configLoad();
         if(empty($printerName)) {
             if(is_null($config['default'])) {
-                throw new \Exception("未配置默认的打印机");
+                throw new \Exception("请现在打印机配置页，设置默认的打印机");
             }
 
             $printerName = $config['default'];
