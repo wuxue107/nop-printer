@@ -51,7 +51,7 @@ class PrinterController extends Controller
             "CapabilityProfile" => "",
         ];
 
-        $printerConfig['ShareName'] = $printerInfo['ShareName']??$printer_name;
+        $printerConfig['ShareName'] = $printerInfo['ShareName']?:$printer_name;
         $printerConfig['ServerName'] = $printerInfo['ServerName']??"";
         if(windows_os()){
             $printerConfig['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
