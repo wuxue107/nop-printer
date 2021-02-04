@@ -15,7 +15,7 @@ IF "%ACTION%"=="register" (
 )
 
 IF "%ACTION%"=="unregister" (
-    sc "\\%USERDOMAIN%" create nop-printer binPath= "%SCRIPT_PATH%printer-start.bat" start= delayed-auto
+    sc delete nop-printer
     exit 0
 )
 
