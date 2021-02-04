@@ -19,7 +19,7 @@ IF "%ACTION%"=="unregister" (
     exit 0
 )
 
-echo Usage : system-service register
+echo Usage :
 echo/
 echo system-service.bat register
 echo OR
