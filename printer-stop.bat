@@ -1,5 +1,10 @@
 @echo off
 
+::
+:: stop the api service
+:: 停止打印机API服务
+::
+
 set SCRIPT_PATH=%~dp0
 cd %SCRIPT_PATH%
 set PHP_PATH=%SCRIPT_PATH%archive\php7.3.4nts
