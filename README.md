@@ -27,7 +27,8 @@
 
 2.点击打印测试页，会跳转到预览页，点击右侧，打印按钮。
 ```
-    
+
+## 打印机调用接口进行配置
 - 获取所有打印机
 ```
 GET http://localhost:8077/api/printer/get-local-printers
