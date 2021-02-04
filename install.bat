@@ -12,6 +12,7 @@ set PHP_PATH=%SCRIPT_PATH%archive\php7.3.4nts
 set PATH=%PHP_PATH%;%PATH%
 
 
+
 copy /Y .env.example .env
 echo/
 echo #######################################################
