@@ -11,8 +11,17 @@ cd %SCRIPT_PATH%
 IF "%ACTION%"=="register" (
     set EXE_FILE=%SCRIPT_PATH%printer-start.bat
     sc "\\%USERDOMAIN%" create nop-printer binPath= "%SCRIPT_PATH%printer-start.bat" start= delayed-auto
+    exit 0
 )
 
 IF "%ACTION%"=="unregister" (
     sc "\\%USERDOMAIN%" create nop-printer binPath= "%SCRIPT_PATH%printer-start.bat" start= delayed-auto
+    exit 0
 )
+
+echo Usage : system-service register
+echo/
+echo system-service.bat register
+echo OR
+echo system-service.bat unregister 
+echo/
