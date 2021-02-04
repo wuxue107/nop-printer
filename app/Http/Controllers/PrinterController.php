@@ -58,7 +58,7 @@ class PrinterController extends Controller
             $printerConfig['PrintConnectorClass'] = "Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector";
 
             if(!PrinterHelper::printerIsShared($printer_name)){
-                PrinterHelper::sharePrinter($printerConfig['ShareName'],$printerConfig['Name'],$printerConfig['ShareName'],$printerConfig['PortName']);
+                PrinterHelper::sharePrinter($printerConfig['ServerName'],$printerConfig['Name'],$printerConfig['PortName'],$printerConfig['ShareName']);
                 if(!PrinterHelper::printerIsShared($printer_name)){
                     return Helper::failMsg("打印机：{$printer_name} 无法设置为共享");
                 }

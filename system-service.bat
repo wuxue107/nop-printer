@@ -1,11 +1,15 @@
 @echo off
 
+set SCRIPT_PATH=%~dp0
+cd %SCRIPT_PATH%
+set PHP_PATH=%SCRIPT_PATH%archive\php7.3.4nts
+set PATH=%PHP_PATH%;%PATH%
+
+
 ::
 :: register system service in to windows. & Boot up
 ::
 set ACTION=%1
-set SCRIPT_PATH=%~dp0
-cd %SCRIPT_PATH%
 
 IF "%ACTION%"=="register" (
     set EXE_FILE=%SCRIPT_PATH%printer-start.bat
