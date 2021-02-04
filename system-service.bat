@@ -10,7 +10,7 @@ cd %SCRIPT_PATH%
 
 IF "%ACTION%"=="register" (
     set EXE_FILE=%SCRIPT_PATH%printer-start.bat
-    sc "\\%USERDOMAIN%" create nop-printer binPath= "%SCRIPT_PATH%printer-start.bat" start= delayed-auto
+    sc "\\%USERDOMAIN%" create nop-printer binPath= "%SCRIPT_PATH%printer-start.bat" start= delayed-auto error= ignore
     exit 0
 )
 
