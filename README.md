@@ -12,7 +12,9 @@
 ## 打印机配置页（或使用下面的接口调用进行配置）
 - 安装后，会自动启动服务，并打开打印配置页面
 - 打印配置页URL : http://localhost:8077/printer-setting
+- 配置页：
 ![alt](./printer-setting.png)
+- 打印效果：
 ![alt](./printer-test.jpg)
 
 - 配置页说明
