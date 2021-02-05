@@ -1,4 +1,177 @@
 Helper ={
+    resolveValue : function(v,param,target){
+        if(target === undefined){
+            target = null;
+        }
+        param = param || [];
+        if($.isFunction(v)){
+            v = v.apply(target,param);
+        }
+
+        return $.when(v);
+    },
+    /**
+     * 队列依次执行
+     *
+     * @param name
+     * @param endFun
+     * @returns {pool}
+     */
+    queuePool : function(name,endFun){
+        name = name || Helper.generateId();
+        endFun = endFun || $.noop;
+
+        var delayMicroSecond = 0;
+        var isListen = false;
+        var listenTickId = 0;
+        var jobs = [];
+        var pool = function () {
+        };
+
+        var endPool = function(){
+            try{
+                endFun();
+            }catch (e) {
+                console.log(e);
+            }
+
+            if(isListen && listenTickId === 0 ){
+                setTimeout(function () {
+                    pool.listen();
+                },50);
+            }
+        };
+
+        var makeJob = function(workFun){
+            return function () {
+                if(delayMicroSecond > 0){
+                    setTimeout(function () {
+                        workFun( jobs.shift() || endPool)
+                    },delayMicroSecond)
+                }else{
+                    workFun( jobs.shift() || endPool);
+                }
+            }
+        };
+
+        pool.getName = function () {
+            return name;
+        };
+
+        /**
+         * 每个job之间的延时
+         *
+         * @param delay 毫秒
+         * @returns {pool}
+         */
+        pool.delay = function(delay){
+            delayMicroSecond = !!delay;
+
+            return pool;
+        };
+
+        /**
+         *
+         * @param  workFunc function(nextFunc)
+         * @param first bool
+         *
+         * @returns {pool}
+         */
+        pool.queue =  function (workFunc,first) {
+            if(first){
+                jobs.push(makeJob(workFunc));
+            }else{
+                jobs.unshift(makeJob(workFunc));
+            }
+
+            return pool;
+        };
+
+        /**
+         * 将数据应用于workFunc依次队列执行
+         *
+         * @param items 数据列表
+         * @param workFunc function(nextFunc,item,itemIndex)
+         * @returns {pool}
+         */
+        pool.queueWithDataItems = function(items,workFunc){
+            for (let index in items){
+                jobs.push(makeJob(function(next){
+                    workFunc(next,items[index],index)
+                }));
+            }
+            return pool;
+        };
+
+        /**
+         * 手动出队开始执行任务
+         */
+        pool.dequeue =  function () {
+            var job = jobs.shift();
+            if(job){
+                job();
+            }
+
+            return false;
+        };
+
+        /**
+         * 清空队列
+         *
+         * @returns {pool}
+         */
+        pool.clear = function () {
+            jobs = [];
+            return pool;
+        };
+
+        /**
+         * 监听队列，只要有任务就执行
+         *
+         * @returns {pool}
+         */
+        pool.listen = function () {
+            isListen = true;
+            if(listenTickId === 0) {
+                listenTickId = setInterval(function () {
+                    if(jobs.length > 0){
+                        clearInterval(listenTickId);
+                        listenTickId = 0;
+                        pool.dequeue();
+                    }
+                },50);
+            }
+
+            return pool;
+        };
+
+        /**
+         * 取消队列监听
+         *
+         * @returns {pool}
+         */
+        pool.cancelListen = function () {
+            isListen = false;
+            if(listenTickId){
+                clearInterval(listenTickId);
+            }
+            listenTickId = 0;
+            return pool;
+        };
+
+        return pool;
+    },
+
+    generateId : function(prefix){
+        var thisFunc = arguments.callee;
+        if(thisFunc._id === undefined){
+            thisFunc._id = (new Date()).getTime();
+        }
+        thisFunc._id ++;
+        prefix = prefix || 'id-';
+        return prefix + thisFunc._id;
+    },
+
     postJson : function(url,data,callback,dataType){
         dataType = dataType || 'json';
 
