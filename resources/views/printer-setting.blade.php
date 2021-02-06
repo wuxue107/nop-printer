@@ -42,7 +42,7 @@
                             <option value=""> - 选择打印机 - </option>
                         </select>
                     </a>
-                    <a class="btn btn-outline btn-default new-tab" id="add-printer" data-title="添加">
+                    <a class="btn btn-outline btn-default new-tab" id="add-printer" style="background-color: #5cb85c; color: white;" data-title="添加">
                         <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -154,7 +154,7 @@
         });
 
     var localPrinterEl = $('#localPrinterInput');
-    $('#add-printer').click(function(){
+    $('#add-printer').click(function(){123
         var selectValue = localPrinterEl.val();
         if(selectValue === ""){
             return;
