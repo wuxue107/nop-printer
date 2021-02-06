@@ -49,21 +49,6 @@
 
 </style>
 <script>
-    postJson = function(url,data,callback,dataType){
-        dataType = dataType || 'json';
-
-        return $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: dataType,
-            data: JSON.stringify(data),
-            headers : {
-                "Content-Type" : "application/json"
-            },
-            success: callback
-        })
-    };
-    
     printQueue = Helper.queuePool();
     var printTicket = function(){
         var pages = $('.nop-page-content');
@@ -77,6 +62,7 @@
                 background : '#ffffff',
                 onrendered: function(c) {
                     images[index] = c.toDataURL();
+                    c = null;
                     def.resolve();
                     // book.css('zoom',0.65);
                 }
@@ -86,7 +72,7 @@
         
         $.when.apply($,imagesPromise).then(function(){
             printQueue.queueWithDataItems(images,function (next, imageData, index) {
-                postJson("http://localhost:8077/api/job/print-image-data-url",{image_data:imageData})
+                Helper.postJson("http://localhost:8077/api/job/print-image-data-url",{image_data:imageData})
                     .error(function(){
                         alert("链接打印服务失败");
                     }).always(function () {
