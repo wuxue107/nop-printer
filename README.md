@@ -37,9 +37,16 @@ GET http://localhost:8077/api/printer/get-local-printers
 
 - 配置添加的小票打印机
 ```$xslt
-POST http://localhost:8077/api/printer/set-printer
+POST http://localhost:8077/api/printer/set-printer-config
 参数：JSON
 {"printer_name":"POS-58","is_default":true}
+```
+
+- 设置默认打印机
+```$xslt
+POST http://localhost:8077/api/printer/set-defult-printer
+参数：JSON
+{"printer_name":"POS-58"}
 ```
 
 ## 打印小票
