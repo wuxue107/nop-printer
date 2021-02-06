@@ -128,7 +128,7 @@
 
     function defaultPrinter(el){
         var id = Helper.getRowId(el);
-        Helper.postJson('/api/printer/set-printer-config',{printer_name: id,is_default : 1}).then(function(d){
+        Helper.postJson('/api/printer/set-default-printer',{printer_name: id}).then(function(d){
             layer.msg(d.msg);
             $table.bootstrapTable('refresh');
         })
@@ -136,8 +136,8 @@
 
     columnFormatter = {
         operation: function (v, row, index) {
-             return '<button onclick="deletePrinter(this);return false;" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
-                + (row.isDefault?'':'<button onclick="defaultPrinter(this);return false;" style="margin: 0 10px" class="btn btn-sm btn-success" tabindex="-1">设为默认</button>');
+             return '<button onclick="deletePrinter(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
+                + (row.isDefault === '是'?'':'<button onclick="defaultPrinter(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">设为默认</button>');
         }
     };
 

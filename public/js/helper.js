@@ -298,5 +298,24 @@ Helper ={
 
         return false;
     },
+    
+    dataPath : function(path,source,defaultValue){
+        if(typeof source === 'undefined' ){
+            source = window;
+        }
+        if(typeof defaultValue === 'undefined'){
+            defaultValue = null
+        }
+        try{
+            var ret = eval('source' + ((path !== undefined && path !== '' && path != null) ?('.' + path):''));
+            if(ret === null || ret === '' || ret === undefined){
+                return defaultValue;
+            }
+
+            return ret;
+        }catch (e) {
+            return defaultValue;
+        }
+    },
 
 }

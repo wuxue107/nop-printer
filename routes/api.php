@@ -27,5 +27,6 @@ Route::prefix('printer')->group(function(){
     Route::get('get-config',[\App\Http\Controllers\PrinterController::class, 'getConfig']);
     Route::post('set-printer-config',[\App\Http\Controllers\PrinterController::class, 'setPrinterConfig']);
     Route::post('remove-printer-config',[\App\Http\Controllers\PrinterController::class, 'removePrinterConfig']);
+    Route::post('set-default-printer',[\App\Http\Controllers\PrinterController::class, 'setDefaultPrinter']);
 });
 

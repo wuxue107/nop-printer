@@ -79,6 +79,13 @@ class PrinterHelper
 
         return self::configStore($config);
     }
+    
+    public static function setDefaultPrinter($printerName){
+        $config = self::configLoad();
+        $config['default'] = $printerName;
+        
+        return self::configStore($config);
+    }
 
     public static function getPrinter($printerName)
     {
@@ -163,8 +170,8 @@ class PrinterHelper
 
         return in_array($shareName, $shareNames);
     }
-
-    public static function setDefaultPrinter($printerName)
+    
+    public static function setSystemDefaultPrinter($printerName)
     {
         shell_exec('rundll32 printui.dll,PrintUIEntry /y /n ' . ProcessUtils::escapeArgument($printerName));
     }

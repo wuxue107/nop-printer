@@ -73,6 +73,12 @@ class PrinterController extends Controller
 
         return Helper::successMsg();
     }
+    
+    public function setDefaultPrinter(){
+        $printer_name = Request::json("printer_name");
+        PrinterHelper::setDefaultPrinter($printer_name);
+        return Helper::successMsg();
+    }
 
     public function removePrinterConfig(){
         $printer_name = Request::json("printer_name");
