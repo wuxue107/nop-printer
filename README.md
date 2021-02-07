@@ -7,7 +7,7 @@
 ## 安装服务
 - 下载源码的zip包
 - 解压源码包
-- 运行printer-start.bat
+- 运行 quick-start.bat（打开配置页） 或 printer-start.bat（不打开配置页）
 
 ## 配置页（或使用下面的接口调用进行配置）
 - 安装后，会自动启动服务，并打开打印配置页面
