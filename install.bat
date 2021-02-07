@@ -12,14 +12,4 @@ echo #######################################################
 .\archive\unzip -o .\archive\php7.3.4nts.zip -d .\archive\
 
 copy /Y .env.example .env
-echo/
-echo #######################################################
-echo ############  start printer api service   ##############
-echo #######################################################
-start printer-start.bat
 
-echo/
-echo #######################################################
-echo ############  open printer setting web page ###########
-echo #######################################################
-printer-setting.bat
