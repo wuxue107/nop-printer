@@ -17,13 +17,13 @@ echo/
 echo #######################################################
 echo ############  start image-print worker queue ##########
 echo #######################################################
-start php queue:work --queue=image-print --daemon --sleep=1 --tries=1
+start php queue:work --queue=image-print --sleep=1 --tries=1
 
 echo/
 echo #######################################################
 echo ############  start tpl-print worker queue ##########
 echo #######################################################
-start php queue:work --queue=tpl-print --daemon --sleep=1 --tries=1
+start php queue:work --queue=tpl-print --sleep=1 --tries=1
 
 echo/
 echo #######################################################
