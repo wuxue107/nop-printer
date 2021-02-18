@@ -15,6 +15,18 @@ if not exist "%PHP_PATH%" (
 
 echo/
 echo #######################################################
+echo ############  start image-print worker queue ##########
+echo #######################################################
+start php queue:work --queue=image-print --daemon --sleep=1 --tries=1
+
+echo/
+echo #######################################################
+echo ############  start tpl-print worker queue ##########
+echo #######################################################
+start php queue:work --queue=tpl-print --daemon --sleep=1 --tries=1
+
+echo/
+echo #######################################################
 echo ############  start printer api service   ##############
 echo #######################################################
-%PHP_PATH%\php artisan serve --port=8077
+php artisan serve --port=8077
