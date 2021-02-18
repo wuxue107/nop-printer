@@ -11,14 +11,21 @@
     <script src="/js/qrcode.min.js"></script>
     <script src="/js/JsBarcode.all.min.js"></script>
     <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI","Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+        }
         .ticket {
             height: auto;
             font-size: 20px;
             padding-bottom: 15mm;
+            line-height: 1.5em;
+            margin: 0 !important;
+            font-weight: 400;
         }
 
         .ticket-58 {
-            width: 384px;
+            width: 370px;
         }
 
         .ticket-68 {
@@ -76,8 +83,8 @@
         }
     </style>
 </head>
-<body>
-<div class="ticket ticket-58" style="">
+<body class="ticket ticket-58">
+<div class="page">
     <div class="font-title text-center row">中文</div>
     <hr>
     <div>
