@@ -40,9 +40,13 @@ class TplPrintJob implements ShouldQueue
      */
     public function handle()
     {
-        $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html");
-        if($image){
-            dispatch(new ImagePrintJob($image,$this->printerName));
+        try{
+            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html");
+            if($image){
+                dispatch(new ImagePrintJob($image,$this->printerName));
+            }
+        }catch(\Throwable $e){
+            $this->fail($e);
         }
     }
 }
