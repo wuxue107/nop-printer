@@ -10,9 +10,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Helpers\NopPrinter;
-use App\Helpers\PrinterHelper;
-use App\Http\Controllers\Controller;
-use http\Exception\InvalidArgumentException;
+use App\Jobs\ImagePrintJob;
+use App\Jobs\TplPrintJob;
 use Illuminate\Support\Facades\Request;
 
 class JobController extends Controller
@@ -29,30 +28,26 @@ class JobController extends Controller
             return Helper::failMsg("无效的参数");
         }
 
-        $content = file_get_contents($imageData);
-        if($content === false){
-            return Helper::failMsg("无效的图片数据");
+        $imageFile = NopPrinter::dataUrl2Image($imageData);
+        if(!$imageFile){
+            return Helper::failMsg("无效的图片");
         }
 
-        $header = strstr($imageData,';',true);
-        $imageType = ltrim(strstr($header,'/',false),'/');
-        $file = 'image/' . sha1($imageData) .'.'. $imageType;
-        Helper::writeRuntimeFile($file,$content);
-        $fullPath = Helper::getRuntimePath($file);
-
-        $printer = PrinterHelper::getPrinter($printerName);
-        $printer->printImage($fullPath);
-        $printer->cut();
-        $printer->close();
-
-        return Helper::successMsg();
+        $job = new ImagePrintJob($imageFile,$printerName);
+        $ret = $this->dispatch($job);
+        return Helper::successMsg($ret);
     }
     
     
     public function printTpl(){
+        $printerName = Request::json("printer_name");
         $tplName = Request::json("tpl_name");
         $tplParams = Request::json("tpl_params");
+        $job = new TplPrintJob($tplName,$tplParams,$printerName);
         
-        return Helper::successMsg(NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html"));
+        
+        $ret = $this->dispatch($job);
+        
+        return Helper::successMsg($ret);
     }
 }

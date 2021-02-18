@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\PrinterHelper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -9,22 +10,22 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class TplPrint implements ShouldQueue
+class ImagePrintJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tplName;
-    public $tplParams;
-    
+    public $queue = 'image-print';
+    public $imageFile;
+    public $printerName;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($tplName,$tplParams)
+    public function __construct($imageFile,$printerName)
     {
-        $this->tplName = $tplName;
-        $this->tplParams = $tplParams;
+        $this->imageFile = $imageFile;
+        $this->printerName = $printerName;
     }
 
     /**
@@ -34,6 +35,9 @@ class TplPrint implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $printer = PrinterHelper::getPrinter($this->printerName);
+        $printer->printImage($this->imageFile);
+        $printer->cut();
+        $printer->close();
     }
 }

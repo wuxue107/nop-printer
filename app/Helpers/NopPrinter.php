@@ -20,9 +20,9 @@ class NopPrinter extends Printer
         $phantomjsBin = base_path('archive\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe');
         $scriptFile = base_path('bin\\web_capture.js');
         if(!$imagePath){
-            $imagePath = Helper::getRuntimePath('image\\' . sha1(microtime(true)) .'.png');
+            $imagePath = Helper::getRuntimePath('image/' . sha1(microtime(true)) .'.png');
         }
-        
+
         $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath);
         
         Helper::writeLog($cmd);
@@ -32,6 +32,25 @@ class NopPrinter extends Printer
         }
         
         return false;
+    }
+    
+    static function dataUrl2Image($imageData){
+        $content = @file_get_contents($imageData);
+        if($content === false){
+            return false;
+        }
+        
+        $header = strstr($imageData,';',true);
+        $imageType = ltrim(strstr($header,'/',false),'/');
+        $file = 'image/' . sha1($imageData) .'.'. $imageType;
+        
+        Helper::writeRuntimeFile($file,$content);
+        $fullPath = Helper::getRuntimePath($file);
+        if(!file_exists($file)){
+            return false;
+        }
+        
+        return $fullPath;
     }
     
     public function printByTpl($tplName,$params = []){
