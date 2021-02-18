@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Helpers\NopPrinter;
 use App\Helpers\PrinterHelper;
 use App\Http\Controllers\Controller;
 use http\Exception\InvalidArgumentException;
@@ -45,5 +46,13 @@ class JobController extends Controller
         $printer->close();
 
         return Helper::successMsg();
+    }
+    
+    
+    public function printTpl(){
+        $tplName = Request::json("tpl_name");
+        $tplParams = Request::json("tpl_params");
+        
+        return Helper::successMsg(NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html"));
     }
 }

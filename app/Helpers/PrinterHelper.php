@@ -14,7 +14,7 @@ class PrinterHelper
             'default' => null,
             'printers' => [],
         ];
-        $configFile = base_path('printer.json');;
+        $configFile = base_path('printer.json');
         if(!is_file($configFile)) {
             return $defaultConfig;
         }
