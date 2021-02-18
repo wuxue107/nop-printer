@@ -18,6 +18,10 @@ echo #######################################################
 .\archive\unzip -o .\archive\phantomjs-2.1.1-windows.zip -d .\archive\
 
 copy /Y .env.example .env
+
+php -r "touch('database/database.sqlite');"
+php artisan migrate
+
 echo/
 echo #######################################################
 echo ############  start printer api service   ##############
