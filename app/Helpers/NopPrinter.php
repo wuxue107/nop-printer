@@ -17,10 +17,10 @@ class NopPrinter extends Printer
     }
     
     static function url2Image($url,$imagePath = null){
-        $phantomjsBin = base_path('archive/phantomjs-2.1.1-windows/bin/phantomjs.exe');
-        $scriptFile = base_path('bin/web_capture.js');
+        $phantomjsBin = base_path('archive\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe');
+        $scriptFile = base_path('bin\\web_capture.js');
         if(!$imagePath){
-            $imagePath = Helper::getRuntimePath('image/' . sha1(microtime(true)) .'.png');
+            $imagePath = Helper::getRuntimePath('image\\' . sha1(microtime(true)) .'.png');
         }
         
         $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath);
