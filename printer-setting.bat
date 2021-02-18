@@ -15,4 +15,4 @@ echo ############  open printer setting web page ###########
 echo #######################################################
 
 echo http://localhost:8077/printer-setting
-start http://localhost:8077/printer-setting
+explorer http://localhost:8077/printer-setting
