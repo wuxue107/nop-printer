@@ -134,7 +134,7 @@ class Helper
 
 
     public static function getRuntimePath($file = ''){
-        return storage_path('runtime/' . $file);
+        return storage_path('runtime' . DIRECTORY_SEPARATOR . $file);
     }
 
     public static function writeRuntimeFile($file,$data,$flags = 0){
