@@ -46,7 +46,7 @@ class NopPrinter extends Printer
         
         Helper::writeRuntimeFile($file,$content);
         $fullPath = Helper::getRuntimePath($file);
-        if(!file_exists($file)){
+        if(!file_exists($fullPath)){
             return false;
         }
         

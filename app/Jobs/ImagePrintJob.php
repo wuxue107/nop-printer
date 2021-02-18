@@ -14,18 +14,20 @@ class ImagePrintJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $queue = 'image-print';
     public $imageFile;
     public $printerName;
+
     /**
-     * Create a new job instance.
+     * ImagePrintJob constructor.
      *
-     * @return void
+     * @param $imageFile
+     * @param $printerName
      */
     public function __construct($imageFile,$printerName)
     {
         $this->imageFile = $imageFile;
         $this->printerName = $printerName;
+        $this->queue = 'image-print';
     }
 
     /**

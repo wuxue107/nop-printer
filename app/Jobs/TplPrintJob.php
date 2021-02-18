@@ -13,22 +13,24 @@ use Illuminate\Queue\SerializesModels;
 class TplPrintJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $queue = 'tpl-print';
+    
     public $tplName;
     public $printerName;
     public $tplParams;
-    
+
     /**
-     * Create a new job instance.
+     * TplPrintJob constructor.
      *
-     * @return void
+     * @param       $tplName
+     * @param array $tplParams
+     * @param null  $printerName
      */
     public function __construct($tplName,$tplParams = [],$printerName = null)
     {
         $this->tplName = $tplName;
         $this->printerName = $printerName;
         $this->tplParams = $tplParams;
+        $this->queue = 'tpl-print';
     }
 
     /**
