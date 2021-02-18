@@ -9,5 +9,9 @@ set PATH=%PHP_PATH%;%PATH%
 :: Open then printer setting url
 ::
 
-timeout /T 3
+echo/
+echo #######################################################
+echo ############  open printer setting web page ###########
+echo #######################################################
+
 start http://localhost:8077/printer-setting
