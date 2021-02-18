@@ -22,3 +22,11 @@ Route::get('/printer-setting',function(){
     $localPrinters = \App\Helpers\PrinterHelper::getLocalPrinters();
     return view('printer-setting', ['localPrinters' => $localPrinters]);
 });
+
+Route::get('/tpl-manager',function(){
+    return view('tpl-manager', []);
+});
+
+Route::get('/tpl-html',function(){
+    return view('tpl-html', []);
+});
