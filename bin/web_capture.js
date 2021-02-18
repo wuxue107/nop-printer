@@ -3,8 +3,8 @@
  */
 var system = require('system');
 
-if (system.args.length !== 2) {
-    console.log('Usage: phantomjs WEB_URL SAVE_FILE');
+if (system.args.length < 2) {
+    console.log('Usage: phantomjs WEB_URL SAVE_FILE [WIDTH] [HEIGHT] [TIMEOUT]');
     phantom.exit();
 }
 
