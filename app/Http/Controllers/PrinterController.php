@@ -16,12 +16,22 @@ use Illuminate\Support\Facades\Request;
 
 class PrinterController extends Controller
 {
+    /**
+     * 获取打印机配置信息
+     * 
+     * @return array
+     */
     public function getConfig(){
         $config = PrinterHelper::configLoad();
 
         return Helper::successMsg($config);
     }
 
+    /**
+     * 配置添加打印机
+     *
+     * @return array
+     */
     public function setPrinterConfig(){
         set_time_limit(60);
         $printer_name = Request::json("printer_name");
@@ -67,13 +77,23 @@ class PrinterController extends Controller
 
         return Helper::successMsg();
     }
-    
+
+    /**
+     * 设置已添加的打印机为默认打印机
+     * 
+     * @return array
+     */
     public function setDefaultPrinter(){
         $printer_name = Request::json("printer_name");
         PrinterHelper::setDefaultPrinter($printer_name);
         return Helper::successMsg();
     }
 
+    /**
+     * 删除已添加的打印机配置
+     * 
+     * @return array
+     */
     public function removePrinterConfig(){
         $printer_name = Request::json("printer_name");
 
@@ -83,6 +103,12 @@ class PrinterController extends Controller
 
         return Helper::successMsg();
     }
+
+    /**
+     * 获取本地打印机
+     * 
+     * @return array
+     */
     public function getLocalPrinters(){
         $printers = PrinterHelper::getLocalPrinters();
 

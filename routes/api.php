@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('job')->group(function(){
     Route::post('print-image-data-url',[\App\Http\Controllers\JobController::class, 'printImageDataUrl']);
     Route::post('print-tpl',[\App\Http\Controllers\JobController::class, 'printTpl']);
+    Route::post('print-html',[\App\Http\Controllers\JobController::class, 'printHtml']);
 });
 
 Route::prefix('printer')->group(function(){

@@ -10,26 +10,22 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class TplPrintJob implements ShouldQueue
+class HtmlPrintJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    
-    public $tplName;
-    public $printerName;
-    public $tplParams;
 
+    public $html;
+    public $printerName;
+    
     /**
-     * TplPrintJob constructor.
+     * Create a new job instance.
      *
-     * @param       $tplName
-     * @param array $tplParams
-     * @param null  $printerName
+     * @return void
      */
-    public function __construct($tplName,$tplParams = [],$printerName = null)
+    public function __construct($html,$printerName)
     {
-        $this->tplName = $tplName;
+        $this->html = $html;
         $this->printerName = $printerName;
-        $this->tplParams = $tplParams;
         $this->queue = 'tpl-print';
     }
 
@@ -40,8 +36,6 @@ class TplPrintJob implements ShouldQueue
      */
     public function handle()
     {
-        
-        $this->tplName;
         try{
             $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html");
             if($image){

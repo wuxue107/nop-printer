@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Helpers\NopPrinter;
+use App\Jobs\HtmlPrintJob;
 use App\Jobs\ImagePrintJob;
 use App\Jobs\TplPrintJob;
 use Illuminate\Support\Facades\Request;
@@ -37,8 +38,12 @@ class JobController extends Controller
         $taskId = $this->dispatch($job);
         return Helper::successMsg(['task_id' => $taskId]);
     }
-    
-    
+
+    /**
+     * 打印模板
+     * 
+     * @return array
+     */
     public function printTpl(){
         $printerName = Request::json("printer_name");
         $tplName = Request::json("tpl_name");
@@ -48,6 +53,22 @@ class JobController extends Controller
         
         $taskId = $this->dispatch($job);
         
+        return Helper::successMsg(['task_id' => $taskId]);
+    }
+
+    /**
+     * 打印HTML
+     * 
+     * @return array
+     */
+    public function printHtml(){
+        $printerName = Request::json("printer_name");
+        $html = Request::json("html");
+        $job = new HtmlPrintJob($html,$printerName);
+
+
+        $taskId = $this->dispatch($job);
+
         return Helper::successMsg(['task_id' => $taskId]);
     }
 }
