@@ -16,12 +16,6 @@ use Illuminate\Support\Facades\Request;
 
 class PrinterController extends Controller
 {
-
-    public function setting(){
-
-        return view('printer-setting', ['name' => 'James']);
-    }
-
     public function getConfig(){
         $config = PrinterHelper::configLoad();
 

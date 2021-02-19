@@ -34,8 +34,8 @@ class JobController extends Controller
         }
 
         $job = new ImagePrintJob($imageFile,$printerName);
-        $ret = $this->dispatch($job);
-        return Helper::successMsg($ret);
+        $taskId = $this->dispatch($job);
+        return Helper::successMsg(['task_id' => $taskId]);
     }
     
     
@@ -46,8 +46,8 @@ class JobController extends Controller
         $job = new TplPrintJob($tplName,$tplParams,$printerName);
         
         
-        $ret = $this->dispatch($job);
+        $taskId = $this->dispatch($job);
         
-        return Helper::successMsg($ret);
+        return Helper::successMsg(['task_id' => $taskId]);
     }
 }
