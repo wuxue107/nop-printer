@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Request;
 
 class PrintTplController extends Controller
 {
+    public function list(){
+        $models = PrintTpl::query();
+        
+    }
+    
     public function create(){
         $attrs = Request::json("attrs");
         $model = new PrintTpl($attrs);
