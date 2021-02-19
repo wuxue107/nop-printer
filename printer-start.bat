@@ -10,7 +10,7 @@ set PATH=%PHP_PATH%;%PATH%
 ::
 
 if not exist "%PHP_PATH%" (
-    call install.bat
+    start /WAIT install.bat
 )
 
 echo/
