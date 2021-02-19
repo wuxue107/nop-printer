@@ -28,5 +28,20 @@ class PrintTplController extends Controller
         return Helper::successMsg();
     }
     
+    public function update(){
+        $id = Request::json("id");
+        $attrs = Request::json("attrs");
+        $model = PrintTpl::findOrFail($id);
+        $model->fill($attrs);
+        $model->save();
+
+        return Helper::successMsg();
+    }
     
+    public function get(){
+        $id = Request::json("id");
+        $model = PrintTpl::findOrFail($id);
+
+        return Helper::successMsg($model);
+    }
 }
