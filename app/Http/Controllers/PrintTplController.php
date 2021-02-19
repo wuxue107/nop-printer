@@ -39,7 +39,7 @@ class PrintTplController extends Controller
     }
     
     public function get(){
-        $id = Request::json("id");
+        $id = Request::input('id');
         $model = PrintTpl::findOrFail($id);
 
         return Helper::successMsg($model);

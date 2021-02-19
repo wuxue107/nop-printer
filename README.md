@@ -66,7 +66,75 @@ printer_name: 可以不传或为空，则使用默认打印机
 ## 打印小票（使用HTML模板，待开发）
 
 ## 模板管理 （待开发）
-
+- 创建模板
+```
+http://127.0.0.1:8077/api/print-tpl/create
+请求：POST-JSON:
+{"attrs":{"tpl_name":"simple-tpl","tpl_content":"<p>11111111</p>","params_examples":"{}"}}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": {
+"tpl_name": "simple-tpl",
+"tpl_content": "<p>11111111</p>",
+"params_examples": "{}",
+"updated_at": "2021-02-19T16:49:38.000000Z",
+"created_at": "2021-02-19T16:49:38.000000Z",
+"id": 2
+}
+}
+```
+- 查询模板
+```
+http://127.0.0.1:8077/api/print-tpl/create
+请求：GET:
+http://127.0.0.1:8077/api/print-tpl/get?id=2
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": {
+"tpl_name": "simple-tpl",
+"tpl_content": "<p>11111111</p>",
+"params_examples": "{}",
+"updated_at": "2021-02-19T16:49:38.000000Z",
+"created_at": "2021-02-19T16:49:38.000000Z",
+"id": 2
+}
+}
+```
+- 删除模板
+```
+http://127.0.0.1:8077/api/print-tpl/delete
+请求：POST-JSON:
+{"id":2}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": null
+}
+```
+- 更新模板
+```
+http://127.0.0.1:8077/api/print-tpl/update
+请求：POST-JSON:
+{id:"2","attrs":{"tpl_name":"simple-tpl","tpl_content":"<p>11111111</p>","params_examples":"{}"}}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": {
+"tpl_name": "simple-tpl",
+"tpl_content": "<p>11111111</p>",
+"params_examples": "{}",
+"updated_at": "2021-02-19T16:49:38.000000Z",
+"created_at": "2021-02-19T16:49:38.000000Z",
+"id": 2
+}
+}
+```
 ## 启动服务
     运行:printer-start.bat
 

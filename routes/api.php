@@ -32,3 +32,9 @@ Route::prefix('printer')->group(function(){
     Route::post('set-default-printer',[\App\Http\Controllers\PrinterController::class, 'setDefaultPrinter']);
 });
 
+Route::prefix('print-tpl')->group(function(){
+    Route::get('get',[\App\Http\Controllers\PrintTplController::class, 'get']);
+    Route::post('create',[\App\Http\Controllers\PrintTplController::class, 'create']);
+    Route::post('delete',[\App\Http\Controllers\PrintTplController::class, 'delete']);
+});
+

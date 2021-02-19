@@ -18,7 +18,7 @@ class CreatePrintTpl extends Migration
             $table->string('tpl_name')->unique();
             $table->longText('tpl_content');
             $table->longText('params_examples');
-            $table->unsignedInteger('available_at');
+            $table->unsignedInteger('updated_at');
             $table->unsignedInteger('created_at');
         });
     }
