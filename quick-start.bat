@@ -9,7 +9,6 @@ set PATH=%PHP_PATH%;%PATH%
 :: quick start 
 ::
 
-
 start printer-start.bat
 
 timeout /T 3

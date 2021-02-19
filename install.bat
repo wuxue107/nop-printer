@@ -22,14 +22,3 @@ copy /Y .env.example .env
 php -r "touch('database/database.sqlite');"
 php artisan migrate
 
-echo/
-echo #######################################################
-echo ############  start printer api service   ##############
-echo #######################################################
-start printer-start.bat
-
-echo/
-echo #######################################################
-echo ############  open printer setting web page ###########
-echo #######################################################
-printer-setting.bat
