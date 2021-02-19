@@ -49,7 +49,7 @@ POST http://localhost:8077/api/printer/set-defult-printer
 {"printer_name":"POS-58"}
 ```
 
-## 打印小票
+## 打印小票（使用图片）
 
 - 因为各种小票打印机支持的功能差异太大，所有就只实现图片打印，市场上80%的小票打印机都支持图片。
 - 测试页就是使用html转canvas图片进行打印的
@@ -61,6 +61,11 @@ printer_name: 可以不传或为空，则使用默认打印机
 {"printer_name":"POS-58","image_data":"data:image/png;base64,..."}
 ```
 
+## 打印小票（使用HTML，开发中）
+
+## 打印小票（使用HTML模板，待开发）
+
+## 模板管理 （待开发）
 
 ## 启动服务
     运行:printer-start.bat
