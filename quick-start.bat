@@ -11,5 +11,5 @@ set PATH=%PHP_PATH%;%PATH%
 
 start printer-start.bat
 
-timeout /T 3
+timeout /T 5
 printer-setting.bat
