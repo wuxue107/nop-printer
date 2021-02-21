@@ -9,15 +9,23 @@ use Illuminate\Support\Facades\Request;
 class PrintTplController extends Controller
 {
     public function list(){
-        $models = PrintTpl::query();
+        $models = PrintTpl::all();
         
+        return Helper::successMsg([
+            'list' => $models,
+        ]);
     }
     
-    public function create(){
+    public function save(){
         $attrs = Request::json("attrs");
-        $model = new PrintTpl($attrs);
+        $tplName = $attrs['tpl_name'];
+        $model = PrintTpl::firstWhere('tpl_name', $tplName);
+        if(!$model){
+            $model = new PrintTpl();
+        }
+        $model->fill($attrs); 
         if(!$model->save()){
-            return Helper::failMsg("添加失败");
+            return Helper::failMsg("保存失败");
         }
         
         return Helper::successMsg($model);
@@ -33,19 +41,9 @@ class PrintTplController extends Controller
         return Helper::successMsg();
     }
     
-    public function update(){
-        $id = Request::json("id");
-        $attrs = Request::json("attrs");
-        $model = PrintTpl::findOrFail($id);
-        $model->fill($attrs);
-        $model->save();
-
-        return Helper::successMsg();
-    }
-    
     public function get(){
-        $id = Request::input('id');
-        $model = PrintTpl::findOrFail($id);
+        $tplName = Request::json('tpl_name');
+        $model = PrintTpl::firstWhere('tpl_name', $tplName);
 
         return Helper::successMsg($model);
     }

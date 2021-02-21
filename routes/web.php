@@ -27,6 +27,9 @@ Route::get('/tpl-manager',function(){
     return view('tpl-manager', []);
 });
 
+Route::get('/tpl-manager',function(){
+    return view('tpl-manager', []);
+});
 Route::get('/tpl-html',function(){
     return view('tpl-html', []);
 });

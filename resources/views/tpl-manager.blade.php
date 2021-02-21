@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>打印机设置</title>
+<title>打印模板管理</title>
 <meta charset="utf-8"/>
 <link rel="shortcut icon" href="favicon.ico">
 <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
@@ -18,37 +18,70 @@
 </head>
 <body>
 
-<script>
-   localPrinters = {!! json_encode($localPrinters) !!};
-</script>
+<div id="tpl-edit-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑打印模板</h4>
+            </div>
+            <div class="modal-body">
+                <form id="tpl-form" class="form-horizontal m-t" action="/index.php?r=gii-test%2Fcreate" method="post">
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">模板名称</label>：</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="input_tpl_name" class="form-control" name="attrs[tpl_name]" aria-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">宽度</label>：</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="input_width" class="form-control" min="0" name="attrs[width]" aria-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">高度</label>：</label>
+                            <div class="col-sm-8">
+                                <input type="number" id="input_height" class="form-control" min="0" name="attrs[height]" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">模板内容</label>：</label>
+                            <div class="col-sm-8">
+                                <textarea rows=6 id="input_tpl_content" class="form-control" name="attrs[tpl_content]" aria-required="true"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">示例参数</label>：</label>
+                            <div class="col-sm-8">
+                                <textarea rows="6" id="input_params_examples" class="form-control" name="attrs[params_examples]" aria-required="true">{}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save-btn" class="btn btn-success ">保存</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div class="contenter">
     <div class="col-sm-8 col-sm-offset-2">
-        <h3>使用说明：</h3>
-        <div class="alert alert-success" role="alert">
-            <p>在操作之前，请先在安装好小票打印机及驱动。</p>
-            <p>1.添加打印机：选择安装的小票打印机，点击“+”号<br>如果列表内为空，则新添加的打印机会成为默认打印机。<br>注意:“虚拟打印机”是无法添加的 </p>
-            <p>2.点击打印测试页，会跳转到预览页，点击右侧，打印按钮。</p>
-
-        </div>
         <div class="bs-bars pull-left">
             <div id="toolbar">
-
                 <div class="btn-group" id="exampleTableEventsToolbar" role="group">
-                    <a class="btn btn-outline btn-default new-tab">
-                        添加打印机：
-                    </a>
-                    <a class="btn btn-default" style="width: 200px">
-                        <select id="localPrinterInput" class="" name="type" style="border: none;width: 100%">
-                            <option value=""> - 选择打印机 - </option>
-                        </select>
-                    </a>
-                    <a class="btn btn-outline btn-default new-tab" id="add-printer" style="background-color: #5cb85c; color: white;" data-title="添加">
-                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
-                    </a>
-                </div>
-                <div class="btn-group" role="group">
-                    <a class="btn btn-outline btn-success new-tab" target="_blank" href="/eazy-ticket.html">
-                        打印测试页
+                    <a class="btn btn-outline btn-default new-tab" id="add-tpl" style="background-color: #5cb85c; color: white;" data-title="添加">
+                        <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>添加模板
                     </a>
                 </div>
             </div>
@@ -61,7 +94,7 @@
                 $table.closest('.bootstrap-table').find('.fixed-table-toolbar>.search,.fixed-table-toolbar>.btn-group').last().after($('#extend_filter'));
             })
         </script>
-        <table id="main_table" data-toggle="table" data-url="/api/printer/get-config"
+        <table id="main_table" data-toggle="table" data-url="/api/print-tpl/list"
                data-method="get"
                data-mobile-responsive="true"
                data-response-handler="bootstrapTableResponseHandler"
@@ -74,10 +107,13 @@
                data-pagination="false" data-side-pagination="server" data-page-size="30">
             <thead>
             <tr>
-                <th data-field="Name" data-width="200px" data-formatter="<span>%s</span>">打印机名称</th>
-                <th data-field="isDefault" data-width="80px" data-formatter="<span>%s</span>">是否默认</th>
+                <th data-field="tpl_name" data-width="150" data-formatter="<span>%s</span>">名称</th>
+                <th data-field="width" data-width="50" data-formatter="<span>%s</span>">宽度</th>
+                <th data-field="height" data-width="50" data-formatter="<span>%s</span>">高度</th>
+                <th data-field="tpl_content" data-formatter="columnFormatter.tpl_content">模板</th>
+                <th data-field="params_examples" data-formatter="<code>%s</code>">示例参数</th>
 
-                <th data-width="100" data-formatter="columnFormatter.operation">操作</th>
+                <th data-width="150" data-formatter="columnFormatter.operation">操作</th>
             </tr>
             </thead>
         </table>
@@ -99,45 +135,81 @@
         if (res.code != 0) {
             return {"total": 0, "rows": []}
         }
-
-        var printers = [];
-        if(res.data.printers){
-            for(var name in res.data.printers){
-                var printer = res.data.printers[name];
-                printer.isDefault = name === res.data.default?'是':'否';
-                printers.push(printer)
-            }
-        }
+        
         return {
-            "total": printers.length,
-            "rows": printers
+            "total": res.data.list.length,
+            "rows": res.data.list
         }
     }
+    
     function queryParams(params) {
         return params;
     }
 
     function deletePrinter(el){
         Helper.deleteRow(el,function(deleteFunc,id,rowData){
-            Helper.postJson('/api/printer/remove-printer-config',{printer_name: id}).then(function(d){
+            Helper.postJson('/api/print-tpl/delete',{tpl_name: rowData.tpl_name}).then(function(d){
                 layer.msg(d.msg);
                 $table.bootstrapTable('refresh');
             })
         })
     }
 
-    function defaultPrinter(el){
-        var id = Helper.getRowId(el);
-        Helper.postJson('/api/printer/set-default-printer',{printer_name: id}).then(function(d){
+    function showTplEdit(data){
+        console.log("init data");
+        console.log(data);
+        var modalEl = $('#tpl-edit-modal');
+        modalEl.modal('show')
+        
+        var attrsNames = ['tpl_name','tpl_content','width','height','params_examples'];
+        for(var i = 0;i<attrsNames.length;i++){
+            var attr = attrsNames[i];
+
+            var val = data[attr];
+            if(val === undefined || val === null){
+                val = '';
+            }
+            $('#input_' + attr).val(val);
+        }
+    } 
+    
+    $('#add-tpl').click(function(){
+        showTplEdit({});
+    });
+    
+    $('#save-btn').click(function () {
+        var attrsNames = ['tpl_name','tpl_content','width','height','params_examples'];
+        var attrs = {};
+        for(var i = 0;i<attrsNames.length;i++){
+            var attr = attrsNames[i];
+            attrs[attr] = $('#input_' + attr).val();
+        }
+        if(attr['height'] === ''){
+            attr['height'] = 0;
+        }
+        if(attr['params_examples'] === ''){
+            attr['params_examples'] = '{}';
+        }
+        console.log("submit data:");
+        console.log(attrs);
+        Helper.postJson('/api/print-tpl/save',{attrs: attrs}).then(function(d){
             layer.msg(d.msg);
             $table.bootstrapTable('refresh');
-        })
+        });
+    });
+    function editTpl(el){
+        var row = Helper.getRowData(el);
+        showTplEdit(row);
     }
 
+    
     columnFormatter = {
         operation: function (v, row, index) {
-             return '<button onclick="deletePrinter(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
-                + (row.isDefault === '是'?'':'<button onclick="defaultPrinter(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">设为默认</button>');
+             return '<button onclick="deleteTpl(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
+                + (row.isDefault === '是'?'':'<button onclick="editTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">编辑</button>');
+        },
+        tpl_content : function (v, row, index) {
+            return $('<div/>').text(v).html();
         }
     };
 
@@ -152,9 +224,8 @@
         {
             height: tableHeight()
         });
-
-    var localPrinterEl = $('#localPrinterInput');
-    $('#add-printer').click(function(){123
+    
+    $('#add-tpl').click(function(){
         var selectValue = localPrinterEl.val();
         if(selectValue === ""){
             return;
@@ -168,19 +239,9 @@
         })
     });
 
-    $(localPrinters).each(function(){
-        return $('<option value="'+this.Name+'">'+this.Name+'</option>').data(this).appendTo(localPrinterEl);
-    });
-
-
     $(function () {
         $('.filter-query').change(function () {
             $table.bootstrapTable('refresh');
-        });
-
-        // 选择批量删除
-        $('#batch_remove').click(function () {
-            Helper.deleteSelections(this, Helper.routeUrl('sys-config/api-batch-delete'));
         });
     })
 </script>

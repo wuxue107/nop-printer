@@ -33,8 +33,9 @@ Route::prefix('printer')->group(function(){
 });
 
 Route::prefix('print-tpl')->group(function(){
+    Route::get('list',[\App\Http\Controllers\PrintTplController::class, 'list']);
     Route::get('get',[\App\Http\Controllers\PrintTplController::class, 'get']);
-    Route::post('create',[\App\Http\Controllers\PrintTplController::class, 'create']);
+    Route::post('save',[\App\Http\Controllers\PrintTplController::class, 'save']);
     Route::post('delete',[\App\Http\Controllers\PrintTplController::class, 'delete']);
 });
 

@@ -177,11 +177,6 @@
         $('.filter-query').change(function () {
             $table.bootstrapTable('refresh');
         });
-
-        // 选择批量删除
-        $('#batch_remove').click(function () {
-            Helper.deleteSelections(this, Helper.routeUrl('sys-config/api-batch-delete'));
-        });
     })
 </script>
 </body>

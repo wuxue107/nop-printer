@@ -16,6 +16,9 @@ class CreatePrintTpl extends Migration
         Schema::create('print_tpl', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tpl_name')->unique();
+            $table->integer('width')->default(0);
+            $table->integer('height')->default(0);
+            $table->string('padding')->default("0mm 5mm 0mm 5mm");
             $table->longText('tpl_content');
             $table->longText('params_examples');
             $table->unsignedInteger('updated_at');
