@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Request;
 class PrintTplController extends Controller
 {
     public function list(){
-        $models = PrintTpl::all();
+        $models = PrintTpl::orderBy('id','desc')->get();
         
         return Helper::successMsg([
             'list' => $models,
@@ -32,8 +32,8 @@ class PrintTplController extends Controller
     }
     
     public function delete(){
-        $id = Request::json("id");
-        $model = PrintTpl::find($id);
+        $tplName = Request::json("tpl_name");
+        $model = PrintTpl::firstWhere('tpl_name', $tplName);
         if($model ) {
             $model->delete();
         }

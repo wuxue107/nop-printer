@@ -15,6 +15,9 @@ class PrintTpl extends Model
         'tpl_name',
         'tpl_content',
         'params_examples',
+        'width',
+        'height',
+        'padding',
     ];
     
 }

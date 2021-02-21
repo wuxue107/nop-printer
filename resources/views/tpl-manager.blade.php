@@ -53,6 +53,14 @@
                     </div>
                     <div class="form-group field-giitest-user_id required">
                         <div class="form-group">
+                            <label class="col-sm-3 control-label"><label class="control-label">边距</label>：</label>
+                            <div class="col-sm-8">
+                                <input type="string" id="input_height" class="form-control" min="0" name="attrs[padding]" value="5mm 0mm 5mm 0mm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group field-giitest-user_id required">
+                        <div class="form-group">
                             <label class="col-sm-3 control-label"><label class="control-label">模板内容</label>：</label>
                             <div class="col-sm-8">
                                 <textarea rows=6 id="input_tpl_content" class="form-control" name="attrs[tpl_content]" aria-required="true"></textarea>
@@ -98,7 +106,7 @@
                data-method="get"
                data-mobile-responsive="true"
                data-response-handler="bootstrapTableResponseHandler"
-               data-id-field="Name"
+               data-id-field="id"
                data-query-params="queryParams"
                data-toolbar="#toolbar"
                data-striped="true"
@@ -107,6 +115,7 @@
                data-pagination="false" data-side-pagination="server" data-page-size="30">
             <thead>
             <tr>
+                <th data-field="id" data-width="50" data-formatter="<span>%s</span>">ID</th>
                 <th data-field="tpl_name" data-width="150" data-formatter="<span>%s</span>">名称</th>
                 <th data-field="width" data-width="50" data-formatter="<span>%s</span>">宽度</th>
                 <th data-field="height" data-width="50" data-formatter="<span>%s</span>">高度</th>
@@ -146,7 +155,7 @@
         return params;
     }
 
-    function deletePrinter(el){
+    function deleteTpl(el){
         Helper.deleteRow(el,function(deleteFunc,id,rowData){
             Helper.postJson('/api/print-tpl/delete',{tpl_name: rowData.tpl_name}).then(function(d){
                 layer.msg(d.msg);
@@ -161,13 +170,17 @@
         var modalEl = $('#tpl-edit-modal');
         modalEl.modal('show')
         
-        var attrsNames = ['tpl_name','tpl_content','width','height','params_examples'];
-        for(var i = 0;i<attrsNames.length;i++){
-            var attr = attrsNames[i];
-
+        var defaultAttrs = {
+            'tpl_name' : '',
+            'tpl_content':'',
+            'width':0,
+            'height' : 0,
+            'params_examples' : '{}'
+        };
+        for(var attr in defaultAttrs){
             var val = data[attr];
             if(val === undefined || val === null){
-                val = '';
+                val = defaultAttrs[attr];
             }
             $('#input_' + attr).val(val);
         }
@@ -177,24 +190,31 @@
         showTplEdit({});
     });
     
-    $('#save-btn').click(function () {
-        var attrsNames = ['tpl_name','tpl_content','width','height','params_examples'];
+    $('#save-btn').click(function (){
+        var defaultAttrs = {
+            'tpl_name' : '',
+            'tpl_content':'',
+            'width':0,
+            'height' : 0,
+            'params_examples' : '{}'
+        };
+    
         var attrs = {};
-        for(var i = 0;i<attrsNames.length;i++){
-            var attr = attrsNames[i];
+        for(var attr in defaultAttrs){
             attrs[attr] = $('#input_' + attr).val();
+            if(attrs[attr] === '') {
+                attrs[attr] = defaultAttrs[attr];
+            }
         }
-        if(attr['height'] === ''){
-            attr['height'] = 0;
-        }
-        if(attr['params_examples'] === ''){
-            attr['params_examples'] = '{}';
-        }
+
         console.log("submit data:");
         console.log(attrs);
         Helper.postJson('/api/print-tpl/save',{attrs: attrs}).then(function(d){
             layer.msg(d.msg);
             $table.bootstrapTable('refresh');
+            if(d.code === 0){
+                $('#tpl-edit-modal').modal('hide')
+            }
         });
     });
     function editTpl(el){
