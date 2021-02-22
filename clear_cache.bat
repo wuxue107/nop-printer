@@ -18,4 +18,3 @@ del /f /s /q storage\runtime\image\*.png
 del /f /s /q storage\runtime\image\*.jpg
 del /f /s /q storage\runtime\*.log
 del /f /s /q storage\logs\*.log
-del /f /s /q storage\framework\sessions\*
