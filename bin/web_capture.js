@@ -28,10 +28,14 @@ setTimeout(function () {
 }, timeout);
 
 var page = require('webpage').create();
-var viewSize = { width: width};
+var viewSize = {};
+if(width){
+    viewSize.width = width;
+}
 if(height){
     viewSize.height = height;
 }
+
 
 page.viewportSize = viewSize;
 page.onConsoleMessage = function(msg, lineNum, sourceId) {

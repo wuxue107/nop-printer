@@ -31,5 +31,17 @@ Route::get('/tpl-manager',function(){
     return view('tpl-manager', []);
 });
 Route::get('/tpl-html',function(){
-    return view('tpl-html', []);
+
+    $job_key = Request::get("job_key");
+    
+    $params = Cache::get($job_key);
+    
+    $errorMsg = null;
+    if(!$params){
+        $params = [
+            'errorMsg' => '该打印任务已失效'
+        ];
+    }
+ 
+    return view('tpl-html', $params);
 });

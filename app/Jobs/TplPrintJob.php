@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\Helper;
 use App\Helpers\NopPrinter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -40,10 +41,30 @@ class TplPrintJob implements ShouldQueue
      */
     public function handle()
     {
-        
-        $this->tplName;
         try{
-            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html");
+            $key = 'tpljob-'. uniqid(true);
+            $printTpl = \App\Models\PrintTpl::firstWhere('tpl_name',$this->tplName);
+            $errorMsg = null;
+            if(!$printTpl){
+                $errorMsg = "模板不存在：" . $this->tplName;
+            }
+
+
+            $pageWidht = $printTpl?$printTpl->width:0;
+            $pageHeight = $printTpl?$printTpl->height:0;
+            $data = [
+                "errorMsg" => $errorMsg,
+                "isTpl" => true,
+                "pageWidth" => intval($pageWidht),
+                "pageHeight" => intval($pageHeight),
+                "tplName" => $this->tplName,
+                "tplParams" => $this->tplParams,
+                'printTpl' => $printTpl?$printTpl->toArray():null,
+                "htmlContent" => "",
+            ];
+            \Cache::set($key,$data,3600);
+
+            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html?job_key={$key}",$pageWidht,$pageHeight);
             if($image){
                 dispatch(new ImagePrintJob($image,$this->printerName));
             }

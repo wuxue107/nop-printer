@@ -16,16 +16,20 @@ class HtmlPrintJob implements ShouldQueue
 
     public $html;
     public $printerName;
+    public $width = 0;
+    public $height = 0;
     
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($html,$printerName)
+    public function __construct($html,$printerName,$width = 0,$height = 0)
     {
         $this->html = $html;
         $this->printerName = $printerName;
+        $this->width = $width;
+        $this->height = $height;
         $this->queue = 'tpl-print';
     }
 
@@ -37,7 +41,20 @@ class HtmlPrintJob implements ShouldQueue
     public function handle()
     {
         try{
-            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html");
+            $key = 'tpljob-'. uniqid(true);
+            $data = [
+                "errorMsg" => '',
+                "isTpl" => false,
+                "tplName" => '',
+                "pageWidth" => intval($this->width),
+                "pageHeight" => intval($this->height),
+                "tplParams" => null,
+                'printTpl' => null,
+                "htmlContent" => $this->html,
+            ];
+            \Cache::set($key,$data,3600);
+            
+            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html",$this->width,$this->height);
             if($image){
                 dispatch(new ImagePrintJob($image,$this->printerName));
             }

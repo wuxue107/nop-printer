@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+<?php 
+
+/**
+ * @var bool $isTpl 是否为模板
+ * @var string $errorMsg 是否为模板
+ * @var array $tplParams 模板参数
+ * @var array $printTpl 模板信息
+ * @var string $htmlContent HTML打印内容
+ */
+
+?><!DOCTYPE html>
 <html lang="zh-cmn-Hans" style='font-size: 20px;'>
 <head>
     <meta charset="utf-8">
@@ -10,6 +20,15 @@
     <script src="/js/lodash.min.js"></script>
     <script src="/js/qrcode.min.js"></script>
     <script src="/js/JsBarcode.all.min.js"></script>
+    <script>
+        var errorMsg = <?=json_encode($errorMsg??'')?>;
+        var isTpl = <?=json_encode($isTpl??false)?>;
+        var printTpl = <?=json_encode($printTpl??null)?>;
+        var tplParams = <?=json_encode($tplParams??null)?>;
+        var htmlContent = <?=json_encode($htmlContent??'')?>;
+        var pageWidth = <?=$pageWidht??0?>;
+        var pageHeight = <?=$pageHeight??0?>;
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI","Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -84,60 +103,52 @@
     </style>
 </head>
 <body class="ticket ticket-58">
-<div class="page">
-    <div class="font-title text-center row">中文</div>
-    <hr>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
-    <div>
-        <div  style=" width: 65%; display: inline;  text-overflow: ellipsis;">小炒肉丝小炒肉丝小炒肉丝</div>
-        <div style="width: 35%;display: inline;">
-            <span >1</span>
-            <span style="float: right;">999.00</span>
-        </div>
-    </div>
+<div id="page" class="page">
 </div>
 <script type="text/javascript">
+    function processHtml(html) {
+        var el = $('<div/>').html(html);
+
+        var defaultQrcodeOption = {
+            text: "",
+            width: 128,
+            height: 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        };
+        el.find('qrcode').each(function(){
+            var item = $(this);
+            var userOption = item.data();
+            var option = $.extend({},defaultQrcodeOption,userOption);
+            new QRCode(this, option);
+        });
+        
+        var defaultBarcodeOption = {
+            width: 4,
+            height: 40,
+            displayValue: false
+        };
+        
+        el.find('barcode').each(function(){
+            var item = $(this);
+            var userOption = item.data();
+            var option = $.extend({},defaultBarcodeOption,userOption);
+            JsBarcode(this, option.text, option);
+        })
+    }
+    
+    function renderTpl(printTpl, tplParams) {
+        
+    }
+    var pageEl = $('#page')
+    if(!errorMsg){
+        pageEl.html("<h4>"+errorMsg+"</h4>")
+    }else if(!isTpl){
+        pageEl.html(processHtml(htmlContent));
+    }else{
+        pageEl.html(renderTpl(printTpl,tplParams));
+    }
 </script>
 </body>
 </html>
