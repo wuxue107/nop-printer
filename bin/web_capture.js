@@ -65,6 +65,8 @@ page.open(webUrl, function (status) {
         if(true === checkComplete()){
             try{
                 var bb = page.evaluate(function (element) {
+                    console.log(element);
+                    console.log(document.querySelector.toString());
                     return document.querySelector(element).getBoundingClientRect();
                 });
                 // 按照实际页面的高度，设定渲染的宽高
