@@ -68,7 +68,7 @@ page.open(webUrl, function (status) {
                     console.log(element);
                     console.log(document.querySelector.toString());
                     return document.querySelector(element).getBoundingClientRect();
-                });
+                },element);
                 // 按照实际页面的高度，设定渲染的宽高
                 page.clipRect = {
                     top:    bb.top,
