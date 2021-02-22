@@ -26,6 +26,7 @@ $pageHeight = $pageHeight??0;
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script src="/js/lodash.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script src="/js/qrcode.min.js"></script>
     <script src="/js/JsBarcode.all.min.js"></script>
     <script>
