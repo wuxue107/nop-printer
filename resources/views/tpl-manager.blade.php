@@ -54,7 +54,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label"><label class="control-label">边距</label>：</label>
                             <div class="col-sm-8">
-                                <input type="string" id="input_height" class="form-control" min="0" name="attrs[padding]" value="40px 0px 40px 0px">
+                                <input type="string" id="input_padding" class="form-control" min="0" name="attrs[padding]" value="40px 0px 40px 0px">
                             </div>
                         </div>
                     </div>
@@ -172,6 +172,7 @@
         var defaultAttrs = {
             'tpl_name' : '',
             'tpl_content':'',
+            'padding':'40px 0px 40px 0px',
             'width':0,
             'height' : 0,
             'params_examples' : '{}'
