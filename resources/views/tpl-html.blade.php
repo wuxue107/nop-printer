@@ -148,7 +148,7 @@ $pageHeight = $pageHeight??0;
         })
     }
 
-    if(!errorMsg){
+    if(errorMsg){
         processHtml("<h4>"+errorMsg+"</h4>");
     }else if(!isTpl){
         processHtml(htmlContent);
