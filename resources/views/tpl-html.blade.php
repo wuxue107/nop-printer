@@ -138,12 +138,13 @@ $pageHeight = $pageHeight??0;
             height: 35,
             displayValue: true
         };
-        
+
         el.find('.barcode').each(function(){
             var item = $(this);
+            var t = $('<canvas />').appendTo(item);
             var userOption = item.data();
             var option = $.extend({},defaultBarcodeOption,userOption);
-            JsBarcode(this, option.text, option);
+            JsBarcode(t.get(0), option.text, option);
         })
     }
 
