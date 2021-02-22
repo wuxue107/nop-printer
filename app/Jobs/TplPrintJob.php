@@ -64,7 +64,7 @@ class TplPrintJob implements ShouldQueue
             ];
             \Cache::set($key,$data,3600);
 
-            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html?job_key={$key}",$pageWidht,$pageHeight);
+            $image = NopPrinter::url2Image("http://127.0.0.1:8077/tpl-html?job_key={$key}");
             if($image){
                 dispatch(new ImagePrintJob($image,$this->printerName));
             }

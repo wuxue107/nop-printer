@@ -16,14 +16,14 @@ class NopPrinter extends Printer
         $this->bitImage($img);
     }
     
-    static function url2Image($url,$width = 0, $height = 0){
+    static function url2Image($url,$element = 'body'){
         $phantomjsBin = base_path('archive\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe');
         $scriptFile = base_path('bin\\web_capture.js');
 
         $imagePath = Helper::getRuntimePath('image/' . sha1(microtime(true)) .'.png');
         
 
-        $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath) . " {$width} {$height}";
+        $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath) . " " . ProcessUtils::escapeArgument($element);
         
         Helper::writeLog($cmd);
         shell_exec($cmd);

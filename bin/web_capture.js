@@ -4,15 +4,18 @@
 var system = require('system');
 
 if (system.args.length < 2) {
-    console.log('Usage: phantomjs WEB_URL SAVE_FILE [WIDTH] [HEIGHT] [TIMEOUT]');
+    console.log('Usage: phantomjs WEB_URL SAVE_FILE [ELEMENT_SELECTOR] [TIMEOUT]');
     phantom.exit();
 }
 
 var webUrl = system.args[1],
     saveFile = system.args[2],
-    width = ~~ system.args[3],
-    height = ~~ system.args[4],
-    timeout = system.args[5];
+    element = system.args[3];
+    timeout = system.args[4];
+
+if(!element){
+    element = 'body';
+}
 
 if(timeout === undefined){
     timeout = 15000;
@@ -28,16 +31,7 @@ setTimeout(function () {
 }, timeout);
 
 var page = require('webpage').create();
-var viewSize = {};
-if(width){
-    viewSize.width = width;
-}
-if(height){
-    viewSize.height = height;
-}
 
-
-page.viewportSize = viewSize;
 page.onConsoleMessage = function(msg, lineNum, sourceId) {
     console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
 };
@@ -69,6 +63,17 @@ page.open(webUrl, function (status) {
 
     setInterval(function(){
         if(true === checkComplete()){
+            var bb = page.evaluate(function () {
+                return document.querySelector(element).getBoundingClientRect();
+            });
+            // 按照实际页面的高度，设定渲染的宽高
+            page.clipRect = {
+                top:    bb.top,
+                left:   bb.left,
+                width:  bb.width,
+                height: bb.height
+            };
+            
             page.render(saveFile);
             phantom.exit();
         }
