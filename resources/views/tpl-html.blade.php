@@ -13,7 +13,7 @@ $isTpl = $isTpl??false;
 $printTpl = $printTpl??null;
 $tplParams = $tplParams??null;
 $htmlContent = $htmlContent??'';
-$pageWidht = $pageWidht??0;
+$pageWidth = $pageWidth??0;
 $pageHeight = $pageHeight??0;
 
 ?><!DOCTYPE html>
@@ -35,12 +35,12 @@ $pageHeight = $pageHeight??0;
         var printTpl = <?=json_encode($printTpl)?>;
         var tplParams = <?=json_encode($tplParams)?>;
         var htmlContent = <?=json_encode($htmlContent)?>;
-        var pageWidth = <?=$pageWidht?>;
+        var pageWidth = <?=$pageWidth?>;
         var pageHeight = <?=$pageHeight?>;
     </script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI","Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-family: -apple-system, BlinkMacSystemFont,"Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             margin: 0;
         }
         .ticket {
@@ -111,7 +111,7 @@ $pageHeight = $pageHeight??0;
         }
     </style>
 </head>
-<body class="ticket" style='width: <?=$pageWidht ? ($pageWidht . 'px') : 'auto' ?>'>
+<body class="ticket" style='width: <?=$pageWidth ? ($pageWidth . 'px') : 'auto' ?>'>
 <div id="page" class="page">
 </div>
 <script type="text/javascript">
