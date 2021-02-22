@@ -50,6 +50,9 @@
                     <a class="btn btn-outline btn-success new-tab" target="_blank" href="/eazy-ticket.html">
                         打印测试页
                     </a>
+                    <a class="btn btn-outline btn-success new-tab" target="_blank" href="/tpl-manager">
+                        打印模板管理
+                    </a>
                 </div>
             </div>
         </div>

@@ -111,8 +111,8 @@ $pageHeight = $pageHeight??0;
         }
     </style>
 </head>
-<body class="ticket ticket-58">
-<div id="page" class="page" style='width: <?=$pageWidht ? ($pageWidht . 'px') : 'auto' ?>'>
+<body class="ticket" style='width: <?=$pageWidht ? ($pageWidht . 'px') : 'auto' ?>'>
+<div id="page" class="page">
 </div>
 <script type="text/javascript">
     function processHtml(html) {
