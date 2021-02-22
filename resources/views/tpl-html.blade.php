@@ -8,6 +8,14 @@
  * @var string $htmlContent HTML打印内容
  */
 
+$errorMsg = $errorMsg??'';
+$isTpl = $isTpl??false;
+$printTpl = $printTpl??null;
+$tplParams = $tplParams??null;
+$htmlContent = $htmlContent??'';
+$pageWidht = $pageWidht??0;
+$pageHeight = $pageHeight??0;
+
 ?><!DOCTYPE html>
 <html lang="zh-cmn-Hans" style='font-size: 20px;'>
 <head>
@@ -21,13 +29,13 @@
     <script src="/js/qrcode.min.js"></script>
     <script src="/js/JsBarcode.all.min.js"></script>
     <script>
-        var errorMsg = <?=json_encode($errorMsg??'')?>;
-        var isTpl = <?=json_encode($isTpl??false)?>;
-        var printTpl = <?=json_encode($printTpl??null)?>;
-        var tplParams = <?=json_encode($tplParams??null)?>;
-        var htmlContent = <?=json_encode($htmlContent??'')?>;
-        var pageWidth = <?=$pageWidht??0?>;
-        var pageHeight = <?=$pageHeight??0?>;
+        var errorMsg = <?=json_encode($errorMsg)?>;
+        var isTpl = <?=json_encode($isTpl)?>;
+        var printTpl = <?=json_encode($printTpl)?>;
+        var tplParams = <?=json_encode($tplParams)?>;
+        var htmlContent = <?=json_encode($htmlContent)?>;
+        var pageWidth = <?=$pageWidht?>;
+        var pageHeight = <?=$pageHeight?>;
     </script>
     <style>
         body {
