@@ -135,9 +135,8 @@ $pageHeight = $pageHeight??0;
         });
         
         var defaultBarcodeOption = {
-            width: 4,
-            height: 40,
-            displayValue: false
+            height: 35,
+            displayValue: true
         };
         
         el.find('.barcode').each(function(){
