@@ -43,5 +43,6 @@ Route::get('/tpl-html',function(){
         ];
     }
  
+    \App\Helpers\Helper::writeLog($params);
     return view('tpl-html', $params);
 });
