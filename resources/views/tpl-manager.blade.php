@@ -7,8 +7,9 @@
 <meta charset="utf-8"/>
 <link rel="shortcut icon" href="favicon.ico">
 <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-<script src="/js/jquery.min.js?v=2.1.4"></script>
-<script src="/js/lodash.min.js?v=4.17.20"></script>
+<?php
+include 'tpl-common.blade.php';
+?>
 <script src="/js/bootstrap.min.js?v=3.3.6"></script>
 <script src="/js/helper.js?v=3.3.6"></script>
 <link href="/css/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
@@ -245,7 +246,14 @@
                 + '<button onclick="testTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">模板打印测试</button>';
         },
         tpl_content : function (v, row, index) {
-            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + _.template(v)(JSON.parse(row.params_examples)); + '</div>';
+            var params;
+            var errorMsg = null;
+            try{
+                params = JSON.parse(row.params_examples);
+            }catch (e) {
+                errorMsg = "模板示例参数错误：" + e.toString();
+            }
+            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + renderTpl(errorMsg,isTpl,row,params,'') + '</div>';
         }
     };
 
@@ -278,6 +286,11 @@
     $(function () {
         $('.filter-query').change(function () {
             $table.bootstrapTable('refresh');
+        });
+
+        $table.on('load-success.bs.table column-switch.bs.table',function(){
+            processTpl();
+            setTimeout(function () {$table.resize();},500);
         });
     })
 </script>
