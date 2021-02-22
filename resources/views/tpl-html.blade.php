@@ -144,7 +144,12 @@
     }else if(!isTpl){
         processHtml(htmlContent);
     }else{
-        processHtml(_.template(printTpl.tplContent,tplParams));
+        try{
+            var html = _.template(printTpl.tplContent)(tplParams);
+            processHtml(html);
+        }catch (e) {
+            processHtml("<h4>渲染模板错误："+e.toString()+"</h4>");
+        }
     }
 </script>
 </body>
