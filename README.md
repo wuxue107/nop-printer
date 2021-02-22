@@ -63,22 +63,22 @@ printer_name: 可以不传或为空，则使用默认打印机
 
 ## 打印小票（使用HTML，开发中）
 
-## 打印小票（使用HTML模板，待开发）
 
-## 模板管理 （待开发）
-- 创建模板
+## 模板管理 
+- 模板采用lodash template 模板语法
+- 保存模板（模板名不存在则创建）
 ```
-http://127.0.0.1:8077/api/print-tpl/create
+http://127.0.0.1:8077/api/print-tpl/save
 请求：POST-JSON:
-{"attrs":{"tpl_name":"simple-tpl","tpl_content":"<p>11111111</p>","params_examples":"{}"}}
+{"attrs":{"tpl_name":"simple-tpl","tpl_content":"<p>HELLO <%=user%></p>","params_examples":"{\"user\":\"WORLD\"}"}}
 响应：
 {
 "code": 0,
 "msg": "操作成功",
 "data": {
 "tpl_name": "simple-tpl",
-"tpl_content": "<p>11111111</p>",
-"params_examples": "{}",
+"tpl_content": "<p>HELLO <%=user%></p>",
+"params_examples": "{\"user\":\"WORLD\"}",
 "updated_at": "2021-02-19T16:49:38.000000Z",
 "created_at": "2021-02-19T16:49:38.000000Z",
 "id": 2
@@ -87,17 +87,14 @@ http://127.0.0.1:8077/api/print-tpl/create
 ```
 - 查询模板
 ```
-http://127.0.0.1:8077/api/print-tpl/create
-请求：GET:
-http://127.0.0.1:8077/api/print-tpl/get?id=2
+http://127.0.0.1:8077/api/print-tpl/get
+请求：POST-JSON:
+{"tpl_name":"simple-tpl"}
 响应：
-{
-"code": 0,
-"msg": "操作成功",
 "data": {
 "tpl_name": "simple-tpl",
-"tpl_content": "<p>11111111</p>",
-"params_examples": "{}",
+"tpl_content": "<p>HELLO <%=user%></p>",
+"params_examples": "{\"user\":\"WORLD\"}",
 "updated_at": "2021-02-19T16:49:38.000000Z",
 "created_at": "2021-02-19T16:49:38.000000Z",
 "id": 2
@@ -108,7 +105,7 @@ http://127.0.0.1:8077/api/print-tpl/get?id=2
 ```
 http://127.0.0.1:8077/api/print-tpl/delete
 请求：POST-JSON:
-{"id":2}
+{"tpl_name":"simple-tpl"}
 响应：
 {
 "code": 0,
@@ -116,22 +113,17 @@ http://127.0.0.1:8077/api/print-tpl/delete
 "data": null
 }
 ```
-- 更新模板
-```
-http://127.0.0.1:8077/api/print-tpl/update
+
+- 使用模板打印
+http://127.0.0.1:8077/api/job/print-tpl
 请求：POST-JSON:
-{id:"2","attrs":{"tpl_name":"simple-tpl","tpl_content":"<p>11111111</p>","params_examples":"{}"}}
+{"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
 响应：
 {
 "code": 0,
 "msg": "操作成功",
 "data": {
-"tpl_name": "simple-tpl",
-"tpl_content": "<p>11111111</p>",
-"params_examples": "{}",
-"updated_at": "2021-02-19T16:49:38.000000Z",
-"created_at": "2021-02-19T16:49:38.000000Z",
-"id": 2
+"task_id": 14
 }
 }
 ```
