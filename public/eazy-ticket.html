@@ -77,6 +77,10 @@
                         alert("链接打印服务失败");
                     }).always(function () {
                         next()
+                    }).then(function(d){
+                        if(d.code !== 0){
+                            alert(d.msg)
+                        }
                     });
             });
             
