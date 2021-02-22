@@ -63,18 +63,23 @@ page.open(webUrl, function (status) {
 
     setInterval(function(){
         if(true === checkComplete()){
-            var bb = page.evaluate(function (element) {
-                return document.querySelector(element).getBoundingClientRect();
-            });
-            // 按照实际页面的高度，设定渲染的宽高
-            page.clipRect = {
-                top:    bb.top,
-                left:   bb.left,
-                width:  bb.width,
-                height: bb.height
-            };
+            try{
+                var bb = page.evaluate(function (element) {
+                    return document.querySelector(element).getBoundingClientRect();
+                });
+                // 按照实际页面的高度，设定渲染的宽高
+                page.clipRect = {
+                    top:    bb.top,
+                    left:   bb.left,
+                    width:  bb.width,
+                    height: bb.height
+                };
+
+                page.render(saveFile);
+            }catch (e) {
+                console.error(e.toString());
+            }
             
-            page.render(saveFile);
             phantom.exit();
         }
     },50);
