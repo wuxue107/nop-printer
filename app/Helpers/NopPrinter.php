@@ -25,7 +25,7 @@ class NopPrinter extends Printer
 
         $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath) . " " . ProcessUtils::escapeArgument($element);
         
-        // Helper::writeLog($cmd);
+        Helper::writeLog($cmd);
         shell_exec($cmd);
         if(file_exists($imagePath)){
             return $imagePath;

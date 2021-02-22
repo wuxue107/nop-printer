@@ -245,7 +245,7 @@
                 + '<button onclick="testTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">模板打印测试</button>';
         },
         tpl_content : function (v, row, index) {
-            return $('<div/>').text(v).html();
+            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + _.template(v)(JSON.parse(row.params_examples)); + '</div>';
         }
     };
 
