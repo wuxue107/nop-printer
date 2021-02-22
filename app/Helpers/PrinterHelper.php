@@ -159,7 +159,7 @@ class PrinterHelper
             . ' -p ' . ProcessUtils::escapeArgument($printerName)
             . ($shareName ? ' -h ' . ProcessUtils::escapeArgument($shareName) : '')
             . ' +shared';
-        Helper::writeLog("设置打印机共享：" . $cmd);
+        // Helper::writeLog("设置打印机共享：" . $cmd);
         shell_exec($cmd);
     }
 
