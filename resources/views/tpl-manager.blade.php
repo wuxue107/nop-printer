@@ -7,9 +7,7 @@
 <meta charset="utf-8"/>
 <link rel="shortcut icon" href="favicon.ico">
 <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-<?php
-include 'tpl-common.blade.php';
-?>
+@include('tpl-common')
 <script src="/js/bootstrap.min.js?v=3.3.6"></script>
 <script src="/js/helper.js?v=3.3.6"></script>
 <link href="/css/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
@@ -121,7 +119,7 @@ include 'tpl-common.blade.php';
                 <th data-field="width" data-width="50" data-formatter="<span>%s</span>">宽度</th>
                 <th data-field="height" data-width="50" data-formatter="<span>%s</span>">高度</th>
                 <th data-field="tpl_content" data-formatter="columnFormatter.tpl_content">模板</th>
-                <th data-field="params_examples" data-formatter="<code>%s</code>">示例参数</th>
+                <th data-field="params_examples" data-formatter="columnFormatter.params_examples">示例参数</th>
 
                 <th data-width="150" data-formatter="columnFormatter.operation">操作</th>
             </tr>
@@ -245,6 +243,14 @@ include 'tpl-common.blade.php';
                 + (row.isDefault === '是'?'':'<button onclick="editTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">编辑</button>')
                 + '<button onclick="testTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">模板打印测试</button>';
         },
+        params_examples : function(v,row,index){
+            try {
+                v = JSON.stringify(JSON.parse(v),null,2)
+            }catch(e){
+                v = e.toString();
+            }
+            return '<pre>' + v + '</pre>'
+        },
         tpl_content : function (v, row, index) {
             var params;
             var errorMsg = null;
@@ -253,7 +259,7 @@ include 'tpl-common.blade.php';
             }catch (e) {
                 errorMsg = "模板示例参数错误：" + e.toString();
             }
-            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + renderTpl(errorMsg,isTpl,row,params,'') + '</div>';
+            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + renderTpl(errorMsg,true,row,params,'') + '</div>';
         }
     };
 
@@ -288,7 +294,7 @@ include 'tpl-common.blade.php';
             $table.bootstrapTable('refresh');
         });
 
-        $table.on('load-success.bs.table column-switch.bs.table',function(){
+        $table.on('load-success.bs.table',function(){
             processTpl();
             setTimeout(function () {$table.resize();},500);
         });

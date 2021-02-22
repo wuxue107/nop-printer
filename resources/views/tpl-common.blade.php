@@ -170,16 +170,19 @@ q.prototype.chain=Xo,q.prototype.commit=nf,q.prototype.next=tf,q.prototype.plant
         .font-title {
             font-size: 30px;
         }
-
-        .line_01 {
-            padding: 0 20px 0;
-            margin: 20px 0;
-            line-height: 1px;
-            border-left: 190px solid #ddd;
-            border-right: 190px solid #ddd;
-            text-align: center;
+        
+        .line-dashed-1{
+            border: 1px dashed black;
+            margin: 1em 0;
+            width: 100%;
         }
 
+        .line-solid-1{
+            border: 1px solid black;
+            margin: 1em 0;
+            width: 100%;
+        }
+        
         .text-left {
             text-align: left
         }
@@ -210,6 +213,10 @@ q.prototype.chain=Xo,q.prototype.commit=nf,q.prototype.next=tf,q.prototype.plant
 
         .text-capitalize {
             text-transform: capitalize
+        }
+        
+        .qrcode.center img{
+            margin: 0 auto;
         }
     </style>
 

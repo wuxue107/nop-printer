@@ -36,15 +36,18 @@ $pageHeight = $pageHeight??0;
         var pageWidth = <?=$pageWidth?>;
         var pageHeight = <?=$pageHeight?>;
     </script>
-    <?php
-        include 'tpl-common.blade.php';
-    ?>
+    @include('tpl-common')
+    <style>
+        .page{
+            padding-bottom: 100px;
+        }
+    </style>
 </head>
 <body class="ticket" style='width: <?=$pageWidth ? ($pageWidth . 'px') : 'auto' ?>'>
 <div id="pages">
 </div>
 <script type="text/javascript">
-    ('#pages').html(renderTpl(errorMsg,isTpl,printTpl,tplParams,htmlContent));
+    $('#pages').html(renderTpl(errorMsg,isTpl,printTpl,tplParams,htmlContent));
     processTpl();
 </script>
 </body>
