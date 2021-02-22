@@ -46,10 +46,14 @@ $pageHeight = $pageHeight??0;
         .ticket {
             height: auto;
             font-size: 20px;
-            padding-bottom: 15mm;
             line-height: 1.5em;
             margin: 0 !important;
             font-weight: 400;
+        }
+        .page{
+            /** 小票打印，最后页尾出纸距离 **/
+            padding-bottom: 10mm;
+            background: white;
         }
 
         .ticket-58 {
