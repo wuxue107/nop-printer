@@ -30,6 +30,7 @@ Route::prefix('printer')->group(function(){
     Route::post('set-printer-config',[\App\Http\Controllers\PrinterController::class, 'setPrinterConfig']);
     Route::post('remove-printer-config',[\App\Http\Controllers\PrinterController::class, 'removePrinterConfig']);
     Route::post('set-default-printer',[\App\Http\Controllers\PrinterController::class, 'setDefaultPrinter']);
+    Route::post('clear-cache',[\App\Http\Controllers\PrinterController::class, 'clearCache']);
 });
 
 Route::prefix('print-tpl')->group(function(){

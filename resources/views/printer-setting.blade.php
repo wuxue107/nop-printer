@@ -53,6 +53,9 @@
                     <a class="btn btn-outline btn-success new-tab" target="_blank" href="/tpl-manager">
                         打印模板管理
                     </a>
+                    <button id="clearCacheBtn" class="btn btn-outline btn-success">
+                        清理缓存
+                    </button>
                 </div>
             </div>
         </div>
@@ -144,13 +147,18 @@
         }
     };
 
+    $('#clearCacheBtn').click(function () {
+        Helper.postJson('/api/printer/clear-cache',{}).then(function(d){
+            layer.msg(d.msg);
+        })
+    });
     $table = $('#main_table');
 
     function tableHeight() {
         var h = $(window).height() - $table.outerHeight(true);
         return h < 300 ? 300 : h;
     }
-
+    
     $table.bootstrapTable(
         {
             height: tableHeight()

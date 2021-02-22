@@ -115,4 +115,10 @@ class PrinterController extends Controller
         return Helper::successMsg(["list" => $printers]);
     }
 
+    public function clearCache(){
+        chdir(base_path());
+        shell_exec("cmd /c clear_cache.bat");
+        
+        return Helper::successMsg();
+    }
 }

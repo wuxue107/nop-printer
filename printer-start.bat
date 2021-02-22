@@ -13,9 +13,6 @@ if not exist "%PHP_PATH%" (
     call install.bat
 )
 
-php artisan view:clear
-php artisan cache:clear
-
 echo/
 echo #######################################################
 echo ############  start image-print worker queue ##########
