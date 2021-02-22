@@ -48,7 +48,7 @@ POST http://localhost:8077/api/printer/set-defult-printer
 {"printer_name":"POS-58"}
 ```
 
-## 打印小票（使用图片）
+## 使用图片打印
 
 - 因为各种小票打印机支持的功能差异太大，所有就只实现图片打印，市场上80%的小票打印机都支持图片。
 - 测试页就是使用html转canvas图片进行打印的
@@ -61,12 +61,24 @@ printer_name: 可以不传或为空，则使用默认打印机
 
 ```
 
-## 打印小票（使用HTML，开发中）
+## 使用打印HTML
+```
+http://127.0.0.1:8077/api/job/print-html
+请求：POST-JSON:
+{"html":"<p>HELLO NOP</p>","printer_name":null}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": {
+"task_id": 14
+}
+}
+```
 
-
-## 模板管理 
+## HTML打印模板管理 
 - 模板采用lodash template 模板语法
-- 保存模板（模板名不存在则创建）
+### 保存模板（模板名不存在则创建）
 ```
 http://127.0.0.1:8077/api/print-tpl/save
 请求：POST-JSON:
@@ -85,7 +97,7 @@ http://127.0.0.1:8077/api/print-tpl/save
 }
 }
 ```
-- 查询模板
+### 查询模板
 ```
 http://127.0.0.1:8077/api/print-tpl/get
 请求：POST-JSON:
@@ -101,7 +113,7 @@ http://127.0.0.1:8077/api/print-tpl/get
 }
 }
 ```
-- 删除模板
+### 删除模板
 ```
 http://127.0.0.1:8077/api/print-tpl/delete
 请求：POST-JSON:
@@ -114,11 +126,11 @@ http://127.0.0.1:8077/api/print-tpl/delete
 }
 ```
 
-- 使用模板打印
+### 使用HTML模板打印
 ```
 http://127.0.0.1:8077/api/job/print-tpl
 请求：POST-JSON:
-{"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
+{"printer_name":null,"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
 响应：
 {
 "code": 0,
