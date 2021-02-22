@@ -127,7 +127,7 @@ $pageHeight = $pageHeight??0;
             colorLight : "#ffffff",
             correctLevel : QRCode.CorrectLevel.H
         };
-        el.find('qrcode').each(function(){
+        el.find('.qrcode').each(function(){
             var item = $(this);
             var userOption = item.data();
             var option = $.extend({},defaultQrcodeOption,userOption);
@@ -140,7 +140,7 @@ $pageHeight = $pageHeight??0;
             displayValue: false
         };
         
-        el.find('barcode').each(function(){
+        el.find('.barcode').each(function(){
             var item = $(this);
             var userOption = item.data();
             var option = $.extend({},defaultBarcodeOption,userOption);
