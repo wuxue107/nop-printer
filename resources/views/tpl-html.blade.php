@@ -154,7 +154,7 @@ $pageHeight = $pageHeight??0;
         processHtml(htmlContent);
     }else{
         try{
-            var html = _.template(printTpl.tplContent)(tplParams);
+            var html = _.template(printTpl.tpl_content)(tplParams);
             processHtml(html);
         }catch (e) {
             processHtml("<h4>渲染模板错误："+e.toString()+"</h4>");
