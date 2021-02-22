@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\Helper;
 use App\Helpers\PrinterHelper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -39,6 +40,7 @@ class ImagePrintJob implements ShouldQueue
     public function handle()
     {
         try{
+            Helper::writeLog([$this->printerName,$this->imageFile]);
             $printer = PrinterHelper::getPrinter($this->printerName);
             $printer->printImage($this->imageFile);
             $printer->cut();
