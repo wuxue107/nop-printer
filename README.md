@@ -34,7 +34,6 @@
 GET http://localhost:8077/api/printer/get-local-printers
 ```
 
-
 - 配置添加的小票打印机
 ```$xslt
 POST http://localhost:8077/api/printer/set-printer-config
@@ -59,6 +58,7 @@ POST http://localhost:8077/api/job/print-image-data-url
 参数：JSON
 printer_name: 可以不传或为空，则使用默认打印机
 {"printer_name":"POS-58","image_data":"data:image/png;base64,..."}
+
 ```
 
 ## 打印小票（使用HTML，开发中）
@@ -128,6 +128,20 @@ http://127.0.0.1:8077/api/job/print-tpl
 }
 }
 ```
+
+## 清理打印缓存
+```$xslt
+POST http://localhost:8077/api/printer/clear-cache
+参数：JSON
+{}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": null
+}
+```
+
 ## 启动服务
     运行:printer-start.bat
 
