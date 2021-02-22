@@ -107,7 +107,8 @@
 </div>
 <script type="text/javascript">
     function processHtml(html) {
-        var el = $('<div/>').html(html);
+        var el = $('#page')
+        el.html(html);
 
         var defaultQrcodeOption = {
             text: "",
@@ -137,17 +138,13 @@
             JsBarcode(this, option.text, option);
         })
     }
-    
-    function renderTpl(printTpl, tplParams) {
-        
-    }
-    var pageEl = $('#page')
+
     if(!errorMsg){
-        pageEl.html("<h4>"+errorMsg+"</h4>")
+        processHtml("<h4>"+errorMsg+"</h4>");
     }else if(!isTpl){
-        pageEl.html(processHtml(htmlContent));
+        processHtml(htmlContent);
     }else{
-        pageEl.html(renderTpl(printTpl,tplParams));
+        processHtml(_.template(printTpl.tplContent,tplParams));
     }
 </script>
 </body>
