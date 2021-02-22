@@ -55,7 +55,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label"><label class="control-label">边距</label>：</label>
                             <div class="col-sm-8">
-                                <input type="string" id="input_height" class="form-control" min="0" name="attrs[padding]" value="5mm 0mm 5mm 0mm">
+                                <input type="string" id="input_height" class="form-control" min="0" name="attrs[padding]" value="40px 0px 40px 0px">
                             </div>
                         </div>
                     </div>
@@ -194,6 +194,7 @@
         var defaultAttrs = {
             'tpl_name' : '',
             'tpl_content':'',
+            'padding':'40px 0px 40px 0px',
             'width':0,
             'height' : 0,
             'params_examples' : '{}'
@@ -206,9 +207,18 @@
                 attrs[attr] = defaultAttrs[attr];
             }
         }
-
-        console.log("submit data:");
-        console.log(attrs);
+        var params;
+        try{
+            params = JSON.parse(attrs['params_examples']);
+            if(!$.isPlainObject(params)){
+                layer.msg("无效的示例模板参数");
+                return;
+            }
+        }catch (e) {
+            layer.msg("无效的示例模板参数,无效JSON");
+            return;
+        }
+        
         Helper.postJson('/api/print-tpl/save',{attrs: attrs}).then(function(d){
             layer.msg(d.msg);
             $table.bootstrapTable('refresh');
@@ -222,11 +232,17 @@
         showTplEdit(row);
     }
 
-    
+    function testTpl(el){
+        var row = Helper.getRowData(el);
+        Helper.postJson('/api/job/print-tpl',{tpl_name: row.tpl_name,tpl_params: JSON.parse(row.params_examples)}).then(function(d){
+            layer.msg(d.msg);
+        });
+    }
     columnFormatter = {
         operation: function (v, row, index) {
              return '<button onclick="deleteTpl(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
-                + (row.isDefault === '是'?'':'<button onclick="editTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">编辑</button>');
+                + (row.isDefault === '是'?'':'<button onclick="editTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">编辑</button>')
+                + '<button onclick="testTpl(this);return false;" style="margin: 5px" class="btn btn-sm btn-success" tabindex="-1">模板打印测试</button>';
         },
         tpl_content : function (v, row, index) {
             return $('<div/>').text(v).html();
