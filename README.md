@@ -115,6 +115,7 @@ http://127.0.0.1:8077/api/print-tpl/delete
 ```
 
 - 使用模板打印
+```
 http://127.0.0.1:8077/api/job/print-tpl
 请求：POST-JSON:
 {"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
