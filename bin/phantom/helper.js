@@ -127,6 +127,7 @@ var capturePageElement = function(userOption){
             clearTimeout(timeoutTickId);
         }
 
+        option.onEnd(page);
         try{
             if(page){
                 page.close();
@@ -135,7 +136,7 @@ var capturePageElement = function(userOption){
             console.warn(e);
         }
     };
-    if(option.pageUrl){
+    if(!option.pageUrl){
         return exitPage("[ERROR]:" + "pageUrl is required .")
     }
     
