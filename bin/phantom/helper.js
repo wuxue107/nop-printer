@@ -28,6 +28,7 @@ var toCamel = function(str) {
  */
 var argsParser = function(optionArgs){
     var options = {
+        args : [],
     };
 
     var index = 1;
@@ -35,21 +36,37 @@ var argsParser = function(optionArgs){
         var optionArg = optionArgs[i];
         var matchs = optionArg.match(/^--([\w-]+)(=(.*))?$/);
         if(!matchs){
-            options[index] = optionArg;
+            options.args[index] = optionArg;
             index++;
         }else{
             var optionName = toCamel(matchs[1]);
             options[optionName] = matchs[3]
         }
     }
-
-    options.getOption = function(name,defaultValue){
-        var name = toCamel(name);
-        if(options[name] === undefined){
+    options._transValue = function(ret,defaultValue){
+        if(ret === undefined){
             return defaultValue;
         }
-        
-        return options[name];
+        if(defaultValue === true || defaultValue === false){
+            return !!ret;
+        }
+
+        if(Number.isInteger(defaultValue)){
+            return ~~ret;
+        }
+
+        if(Number.isFinite(defaultValue)){
+            return ret * 1.0;
+        }
+
+        return ret;
+    };
+    options.getOption = function(name,defaultValue){
+        return options._transValue(options[name],defaultValue);
+    };
+    
+    options.getArgs = function (index,defaultValue) {
+        return options._transValue(options.args[index],defaultValue);
     };
 
     return options;
