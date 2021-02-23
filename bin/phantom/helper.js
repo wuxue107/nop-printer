@@ -97,6 +97,8 @@ var capturePageElement = function(userOption){
     var option;
     var intervalTickId;
     var timeoutTickId;
+    var page;
+    var exitPage;
     var defaultOption = {
         debug : true,
         pageUrl : '',
@@ -112,27 +114,37 @@ var capturePageElement = function(userOption){
     };
     
     option = defaultOption.assign(userOption);
+
+    exitPage = function (msg) {
+        console.info('PAGE EXIT: ' + msg)
+        if(intervalTickId){
+            clearInterval(intervalTickId)
+        }
+
+        if(timeoutTickId){
+            clearTimeout(timeoutTickId);
+        }
+
+        try{
+            if(page){
+                page.close();
+            }
+        }catch (e) {
+            console.warn(e);
+        }
+    };
+    if(option.pageUrl){
+        exitPage("[ERROR]:" + "pageUrl is required .")
+    }
     
-    var page = require('webpage').create(option.pageOption);
+    page = require('webpage').create(option.pageOption);
     timeoutTickId = setTimeout(function () {
         option.onEnd(page);
         // 超时未渲染完成则退出
         exitPage("wait render timeout:" + option.timeout + 'ms')
     }, option.timeout);
 
-    var exitPage = function (msg) {
-        console.info('PAGE EXIT: ' + msg)
-        if(intervalTickId){
-            clearInterval(intervalTickId)
-        }
 
-        clearTimeout(timeoutTickId);
-        try{
-            page.close();
-        }catch (e) {
-            console.warn(e);
-        }
-    };
     
     if(option.debug){
          page.onConsoleMessage = function(msg, lineNum, sourceId) {
