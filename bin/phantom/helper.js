@@ -106,19 +106,18 @@ var capturePageElement = function(userOption){
         checkCompleteJsAssert : 'true',
         onComplete : function (page) {
             captureElement(page,option.element,option.outputFile);
+        },
+        onEnd : function (page) {            
         }
     };
     
     option = defaultOption.assign(userOption);
     
     var page = require('webpage').create(option.pageOption);
-
-    
     timeoutTickId = setTimeout(function () {
+        option.onEnd(page);
         // 超时未渲染完成则退出
-        console.info("wait render timeout:" + option.timeout + 'ms');
-        page.close();
-        page = null;
+        exitPage("wait render timeout:" + option.timeout + 'ms')
     }, option.timeout);
 
     var exitPage = function (msg) {

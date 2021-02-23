@@ -29,11 +29,6 @@ if(!outputFile){
 console.info("PAGE_URL: " + pageUrl);
 console.info("OUTPUT_FILE: " + outputFile);
 
-setTimeout(function () {
-    // 超时未渲染完成则退出
-    console.info("wait render timeout:" + timeout + 'ms');
-    phantom.exit();
-}, timeout + 5);
 
 helper.capturePageElement({
     pageUrl : pageUrl,
@@ -41,4 +36,7 @@ helper.capturePageElement({
     timeout : timeout,
     element : element,
     checkCompleteJsAssert : checkCompleteJsAssert,
+    onEnd : function (page) {
+        phantom.exit();
+    }
 });
