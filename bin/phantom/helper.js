@@ -4,7 +4,9 @@
 
 "use strict";
 
-var system = require('system');
+var System = require('system');
+var WebPage = require('webpage');
+var FS = require('fs');
 
 /**
  * 去两边空格
@@ -30,7 +32,7 @@ var toCamel = function(str) {
  */
 var argsParser = function(optionArgs){
     if(optionArgs === undefined){
-        optionArgs = system.args.slice(1)
+        optionArgs = System.args.slice(1)
     }
     var options = {
         args : [],
@@ -76,11 +78,10 @@ var argsParser = function(optionArgs){
     return options;
 };
 
-
-var captureElement = function (page,element,outputFile) {
-    var bb = page.evaluate(function (element) {
-        return document.querySelector(element).getBoundingClientRect();
-    },element);
+var captureElement = function (page,elementSelector) {
+    var bb = page.evaluate(function (elementSelector) {
+        return document.querySelector(elementSelector).getBoundingClientRect();
+    },elementSelector);
     // 按照实际页面的高度，设定渲染的宽高
     page.clipRect = {
         top:    bb.top,
@@ -89,12 +90,21 @@ var captureElement = function (page,element,outputFile) {
         height: bb.height
     };
 
-    page.render(outputFile);
-}
+    return page;
+};
 
+var captureElementToFile = function (page,elementSelector,outputFile) {
+    captureElement(page,elementSelector).render(outputFile);
+    return FS.exists(path);
+};
 
+var captureElementToBase64 = function (page,elementSelector,format) {
+    return captureElement(page,elementSelector).renderBase64(format);
+};
 
-var capturePageElement = function(userOption){
+var noop = function () {};
+
+var loadPage = function(userOption){
     var option;
     var intervalTickId;
     var timeoutTickId;
@@ -103,15 +113,10 @@ var capturePageElement = function(userOption){
     var defaultOption = {
         debug : true,
         pageUrl : '',
-        element : 'body',
         timeout : 15000,
-        outputFile : 'output.png',
         checkCompleteJsAssert : 'true',
-        onComplete : function (page) {
-            captureElement(page,option.element,option.outputFile);
-        },
-        onEnd : function (page) {            
-        }
+        onComplete : noop, // onComplete(page)
+        onEnd : noop //// onEnd(page)
     };
     
     option = extend(defaultOption,userOption);
@@ -132,6 +137,7 @@ var capturePageElement = function(userOption){
             if(page){
                 page.close();
             }
+            page = null;
         }catch (e) {
             console.warn(e);
         }
@@ -139,19 +145,29 @@ var capturePageElement = function(userOption){
     if(!option.pageUrl){
         return exitPage("[ERROR]:" + "pageUrl is required .")
     }
-    
-    page = require('webpage').create(option.pageOption);
+
+    page = WebPage.create(option.pageOption);
+    page.onPrompt = function(msg, defaultVal) {
+        return defaultVal;
+    };
+    page.onAlert = function(msg) {
+        console.info('[ALERT]: ' + msg);
+    };
+    page.onConfirm = function(msg) {
+        console.log('[CONFIRM]: ' + msg);
+        return true; // `true` === pressing the "OK" button, `false` === pressing the "Cancel" button
+    };
     timeoutTickId = setTimeout(function () {
         option.onEnd(page);
         // 超时未渲染完成则退出
         return exitPage("wait render timeout:" + option.timeout + 'ms')
-    }, option.timeout);
+    }, option.timeout + 5);
     
     if(option.debug){
          page.onConsoleMessage = function(msg, lineNum, sourceId) {
             console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
          };
-        
+
          // page.onResourceRequested = function(request) {
          //     console.log('Request ' + request.url);
          // };
@@ -167,21 +183,21 @@ var capturePageElement = function(userOption){
         },option.checkCompleteJsAssert);
     };
 
-
     try{
         page.open(option.pageUrl, function (status) {
             console.info("Status: " + status);
             if(status !== "success") {
                 return exitPage("[ERROR]:" + 'FAIL to load the address');
             }
-            
+
             // 加载外部JS
             // page.includeJs('https://cdn.bootcdn.net/ajax/libs/jquery/2.1.4/jquery.min.js', function() {
             //
             // });
 
+            var checkOk = false;
             var intervalTickId = setInterval(function(){
-                if(true === checkComplete()){
+                if(checkOk){
                     clearInterval(intervalTickId);
                     try{
                         option.onComplete(page)
@@ -190,15 +206,15 @@ var capturePageElement = function(userOption){
                     }
 
                     return exitPage("complete !!");
+                }else{
+                    checkOk = checkComplete();
                 }
             },50);
         });
     }catch (e) {
-        exitPage("[ERROR]:" + e.toString())
+        return exitPage("[ERROR]:" + e.toString())
     }
 };
-
-
 
 var isArray = Array.isArray;
 var isFunction = function (obj) {
@@ -282,11 +298,13 @@ var extend = function() {
 exports.trim = trim;
 exports.toCamel = toCamel;
 exports.argsParser = argsParser;
-exports.capturePageElement = capturePageElement;
 exports.captureElement = captureElement;
+exports.captureElement = captureElementToBase64;
+exports.captureElementToFile = captureElementToFile;
 exports.isArray = isArray;
 exports.isFunction = isFunction;
 exports.extend = extend;
+exports.loadPage = loadPage;
 exports.isPlainObject = isPlainObject;
 
 

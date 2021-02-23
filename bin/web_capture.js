@@ -30,12 +30,13 @@ console.info("PAGE_URL: " + pageUrl);
 console.info("OUTPUT_FILE: " + outputFile);
 
 
-helper.capturePageElement({
+helper.loadPage({
     pageUrl : pageUrl,
-    outputFile : outputFile,
     timeout : timeout,
-    element : element,
     checkCompleteJsAssert : checkCompleteJsAssert,
+    onComplete : function(page){
+        helper.captureElementToFile(page,element,outputFile);
+    },
     onEnd : function (page) {
         phantom.exit();
     }
