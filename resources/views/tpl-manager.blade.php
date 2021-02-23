@@ -260,7 +260,8 @@
             }catch (e) {
                 errorMsg = "模板示例参数错误：" + e.toString();
             }
-            return  '<div style="width: '+row.width+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + renderTpl(errorMsg,true,row,params,'') + '</div>';
+            var zoom = 0.5;
+            return  '<div style="width: '+(row.width * zoom)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale('+zoom+', '+zoom+');">' + renderTpl(errorMsg,true,row,params,'') + '</div>';
         }
     };
 
