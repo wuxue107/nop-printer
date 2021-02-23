@@ -44,7 +44,7 @@ var argsParser = function(optionArgs){
         }
     }
     options._transValue = function(ret,defaultValue){
-        if(ret === undefined){
+        if(ret === undefined || ret === ""){
             return defaultValue;
         }
         if(defaultValue === true || defaultValue === false){
