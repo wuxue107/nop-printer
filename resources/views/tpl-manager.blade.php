@@ -304,7 +304,7 @@
             $('.page').each(function(){
                 var el = $(this);
                 var w = el.parent().parent();
-                w.css({height:el.height() * demoZoom,width:el.width() * demoZoom});
+                w.css({height:el.height() * demoZoom + 50,width:el.width() * demoZoom});
             })
             setTimeout(function () {$table.resize();},1000);
         });
