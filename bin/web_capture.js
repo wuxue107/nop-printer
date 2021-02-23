@@ -29,15 +29,24 @@ if(!outputFile){
 console.info("PAGE_URL: " + pageUrl);
 console.info("OUTPUT_FILE: " + outputFile);
 
-
+var ret = 0;
 helper.loadPage({
     pageUrl : pageUrl,
     timeout : timeout,
     checkCompleteJsAssert : checkCompleteJsAssert,
-    onComplete : function(page){
-        helper.captureElementToFile(page,element,outputFile);
+    onSuccess : function(page){
+        if(!helper.captureElementToFile(page,element,outputFile)){
+            ret = 1;
+            console.error('[ERROR] 1: make image failed')
+        }else{
+            console.info("success");
+        }
+    },
+    onError : function(page,msg,code){
+        ret = code;
+        console.error('[ERROR] ' + code + ':' + msg)
     },
     onEnd : function (page) {
-        phantom.exit();
+        phantom.exit(ret);
     }
 });

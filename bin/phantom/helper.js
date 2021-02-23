@@ -4,9 +4,8 @@
 
 "use strict";
 
-var System = require('system');
+
 var WebPage = require('webpage');
-var FS = require('fs');
 
 /**
  * 去两边空格
@@ -32,7 +31,7 @@ var toCamel = function(str) {
  */
 var argsParser = function(optionArgs){
     if(optionArgs === undefined){
-        optionArgs = System.args.slice(1)
+        optionArgs = require('system').args.slice(1)
     }
     var options = {
         args : [],
@@ -94,36 +93,45 @@ var captureElement = function (page,elementSelector) {
 };
 
 var captureElementToFile = function (page,elementSelector,outputFile) {
+    var oldRect = page.clipRect;
     captureElement(page,elementSelector).render(outputFile);
-    return FS.exists(path);
+    page.clipRect = oldRect;
+    return require('fs').exists(path);
 };
 
-var captureElementToBase64 = function (page,elementSelector,format) {
-    return captureElement(page,elementSelector).renderBase64(format);
+var captureElementToBase64 = function (page,elementSelector) {
+    var oldRect = page.clipRect;
+    var ret = 'data:image/png;base64,' + captureElement(page,elementSelector).renderBase64('png');
+    page.clipRect = oldRect;
+    return ret;
 };
 
 var noop = function () {};
+
 
 var loadPage = function(userOption){
     var option;
     var intervalTickId;
     var timeoutTickId;
     var page;
-    var exitPage;
     var defaultOption = {
+        width : 1000,
+        height : 1000,
         debug : true,
         pageUrl : '',
+        interval : 50,
         timeout : 15000,
         checkCompleteJsAssert : 'true',
-        onComplete : noop, // onComplete(page)
+        onError : noop,
+        onSuccess : noop, // onComplete(page)
         onEnd : noop //// onEnd(page)
     };
     
-    option = extend(defaultOption,userOption);
+    option = extend(true,defaultOption,userOption);
 
     console.log(JSON.stringify(option));
-    exitPage = function (msg) {
-        console.info('PAGE EXIT: ' + msg)
+    var pageError = function (msg,code) {
+        code = code || 999;
         if(intervalTickId){
             clearInterval(intervalTickId)
         }
@@ -131,22 +139,29 @@ var loadPage = function(userOption){
         if(timeoutTickId){
             clearTimeout(timeoutTickId);
         }
-
+        
+        option.onError(page,msg,code);
         option.onEnd(page);
+    };
+    
+    var pageEnd = function (page) {
         try{
-            if(page){
-                page.close();
-            }
-            page = null;
+            option.onEnd(page);
         }catch (e) {
-            console.warn(e);
+            console.error(e.toString())
+        }
+        
+        try{
+            page.close();
+        }catch (e) {
         }
     };
     if(!option.pageUrl){
-        return exitPage("[ERROR]:" + "pageUrl is required .")
+        return pageError("[ERROR]:" + "pageUrl is required .")
     }
 
-    page = WebPage.create(option.pageOption);
+    page = WebPage.create();
+    page.viewportSize = {width:option.width,height:option.height};
     page.onPrompt = function(msg, defaultVal) {
         return defaultVal;
     };
@@ -160,21 +175,21 @@ var loadPage = function(userOption){
     timeoutTickId = setTimeout(function () {
         option.onEnd(page);
         // 超时未渲染完成则退出
-        return exitPage("wait render timeout:" + option.timeout + 'ms')
-    }, option.timeout + 5);
+        return pageError("wait render timeout:" + option.timeout + 'ms')
+    }, option.timeout + option.interval + 5);
     
     if(option.debug){
          page.onConsoleMessage = function(msg, lineNum, sourceId) {
             console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
          };
 
-         // page.onResourceRequested = function(request) {
-         //     console.log('Request ' + request.url);
-         // };
-         //
-         // page.onResourceReceived = function(response) {
-         //     console.log('Receive ' + response.statusText + '|' + response.contentType + '|' + response.url);
-         // };
+         page.onResourceRequested = function(request) {
+             console.log('Request ' + request.url);
+         };
+
+         page.onResourceReceived = function(response) {
+             console.log('Receive ' + response.statusText + '|' + response.contentType + '|' + response.url);
+         };
     }
     
     var checkComplete = function(){
@@ -184,10 +199,11 @@ var loadPage = function(userOption){
     };
 
     try{
+        console.info("open url: " + option.pageUrl);
         page.open(option.pageUrl, function (status) {
             console.info("Status: " + status);
             if(status !== "success") {
-                return exitPage("[ERROR]:" + 'FAIL to load the address');
+                return pageError('failed to load the address');
             }
 
             // 加载外部JS
@@ -200,19 +216,18 @@ var loadPage = function(userOption){
                 if(checkOk){
                     clearInterval(intervalTickId);
                     try{
-                        option.onComplete(page)
+                        option.onSuccess(page);
+                        pageEnd(page);
                     }catch (e) {
-                        return exitPage("[ERROR]:" + e.toString());
+                        return pageError("[ERROR]:" + e.toString());
                     }
-
-                    return exitPage("complete !!");
                 }else{
                     checkOk = checkComplete();
                 }
-            },50);
+            },option.interval);
         });
     }catch (e) {
-        return exitPage("[ERROR]:" + e.toString())
+        return pageError("[ERROR]:" + e.toString())
     }
 };
 
@@ -299,7 +314,7 @@ exports.trim = trim;
 exports.toCamel = toCamel;
 exports.argsParser = argsParser;
 exports.captureElement = captureElement;
-exports.captureElement = captureElementToBase64;
+exports.captureElementToBase64 = captureElementToBase64;
 exports.captureElementToFile = captureElementToFile;
 exports.isArray = isArray;
 exports.isFunction = isFunction;
