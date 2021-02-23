@@ -127,6 +127,11 @@
         </table>
     </div>
 </div>
+<style>
+    .page{
+        transform: scale(0.5,0.5);
+    }
+</style>
 <script type="text/javascript">
     var loadingId;
     $(document).ajaxSend(function () {
@@ -261,7 +266,7 @@
                 errorMsg = "模板示例参数错误：" + e.toString();
             }
             var zoom = 0.5;
-            return  '<div style="width: '+(row.width * zoom)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale('+zoom+', '+zoom+');">' + renderTpl(errorMsg,true,row,params,'') + '</div>';
+            return  '<div style="width: '+(row.width * zoom)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;">' + renderTpl(errorMsg,true,row,params,'') + '</div>';
         }
     };
 
