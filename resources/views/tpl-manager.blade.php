@@ -304,8 +304,7 @@
         $('.page').each(function(){
             var el = $(this);
             var w = el.parent().parent();
-            w.height(el.height())
-            w.width(el.width())
+            w.css({height:el.height(),width:el.width()});
         })
     })
 </script>
