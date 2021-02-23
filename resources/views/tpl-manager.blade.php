@@ -239,7 +239,7 @@
         });
     }
     
-    var demoZoom = 0.5;
+    var demoZoom = 0.7;
     columnFormatter = {
         operation: function (v, row, index) {
              return '<button onclick="deleteTpl(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
