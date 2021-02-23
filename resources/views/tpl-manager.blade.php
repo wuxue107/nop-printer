@@ -261,7 +261,7 @@
                 errorMsg = "模板示例参数错误：" + e.toString();
             }
 
-            return  '<div style="width:'+(row.width/2)+'"><div style="width: '+(row.width)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale(0.5,0.5)">' + renderTpl(errorMsg,true,row,params,'') + '</div></div>';
+            return  '<div style="width:'+(row.width/2)+'px"><div style="width: '+(row.width)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale(0.5,0.5);transform-origin: 0 0;">' + renderTpl(errorMsg,true,row,params,'') + '</div></div>';
         }
     };
 
