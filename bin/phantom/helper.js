@@ -48,7 +48,10 @@ var argsParser = function(optionArgs){
             return defaultValue;
         }
         if(defaultValue === true || defaultValue === false){
-            return !!ret;
+            if(ret === "0" || ret === "false" || ret === "no"){
+                return false;
+            }
+            return true;
         }
 
         if(typeof defaultValue === 'number'){
