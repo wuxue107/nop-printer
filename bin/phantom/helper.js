@@ -58,7 +58,7 @@ var argsParser = function(optionArgs){
         return ret;
     };
     options.getOption = function(name,defaultValue){
-        return options._transValue(options[name],defaultValue);
+        return options._transValue(options[toCamel(name)],defaultValue);
     };
     
     options.getArgs = function (index,defaultValue) {
