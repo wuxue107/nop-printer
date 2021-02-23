@@ -51,11 +51,11 @@ var argsParser = function(optionArgs){
             return !!ret;
         }
 
-        if(Number.isInteger(defaultValue)){
+        if(typeof defaultValue === 'number' && ~~defaultValue === defaultValue){
             return ~~ret;
         }
 
-        if(Number.isFinite(defaultValue)){
+        if(typeof defaultValue === 'number'){
             return ret * 1.0;
         }
 
