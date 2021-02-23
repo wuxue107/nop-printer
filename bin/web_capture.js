@@ -33,57 +33,12 @@ setTimeout(function () {
     // 超时未渲染完成则退出
     console.info("wait render timeout:" + timeout + 'ms');
     phantom.exit();
-}, timeout);
+}, timeout + 5);
 
-var page = require('webpage').create();
-page.onConsoleMessage = function(msg, lineNum, sourceId) {
-    console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
-};
-
-// page.onResourceRequested = function(request) {
-//     console.log('Request ' + request.url);
-// };
-// page.onResourceReceived = function(response) {
-//     console.log('Receive ' + response.statusText + '|' + response.contentType + '|' + response.url);
-// };
-var checkComplete = function(){
-    return page.evaluate(function(checkCompleteJsAssert){
-        return eval(checkCompleteJsAssert);
-    },checkCompleteJsAssert);
-};
-
-page.open(pageUrl, function (status) {
-    console.info("Status: " + status);
-    if(status !== "success") {
-        console.error('FAIL to load the address');
-        phantom.exit();
-    }
-    // 加载外部JS
-    // page.includeJs('https://cdn.bootcdn.net/ajax/libs/jquery/2.1.4/jquery.min.js', function() {
-    //
-    // });
-
-    var tickId = setInterval(function(){
-        if(true === checkComplete()){
-            clearInterval(tickId);
-            try{
-                var bb = page.evaluate(function (element) {
-                    return document.querySelector(element).getBoundingClientRect();
-                },element);
-                // 按照实际页面的高度，设定渲染的宽高
-                page.clipRect = {
-                    top:    bb.top,
-                    left:   bb.left,
-                    width:  bb.width,
-                    height: bb.height
-                };
-
-                page.render(outputFile);
-            }catch (e) {
-                console.error(e.toString());
-            }
-            
-            phantom.exit();
-        }
-    },50);
+helper.capturePageElement({
+    pageUrl : pageUrl,
+    outputFile : outputFile,
+    timeout : timeout,
+    element : element,
+    checkCompleteJsAssert : checkCompleteJsAssert,
 });

@@ -77,6 +77,118 @@ var argsParser = function(optionArgs){
 };
 
 
+var captureElement = function (page,element,outputFile) {
+    var bb = page.evaluate(function (element) {
+        return document.querySelector(element).getBoundingClientRect();
+    },element);
+    // 按照实际页面的高度，设定渲染的宽高
+    page.clipRect = {
+        top:    bb.top,
+        left:   bb.left,
+        width:  bb.width,
+        height: bb.height
+    };
+
+    page.render(outputFile);
+}
+
+
+var capturePageElement = function(userOption){
+    var option;
+    var intervalTickId;
+    var timeoutTickId;
+    var defaultOption = {
+        debug : true,
+        pageUrl : '',
+        element : 'body',
+        timeout : 15000,
+        outputFile : 'output.png',
+        checkCompleteJsAssert : 'true',
+        onComplete : function (page) {
+            captureElement(page,option.element,option.outputFile);
+        }
+    };
+    
+    option = defaultOption.assign(userOption);
+    
+    var page = require('webpage').create(option.pageOption);
+
+    
+    timeoutTickId = setTimeout(function () {
+        // 超时未渲染完成则退出
+        console.info("wait render timeout:" + option.timeout + 'ms');
+        page.close();
+        page = null;
+    }, option.timeout);
+
+    var exitPage = function (msg) {
+        console.info('PAGE EXIT: ' + msg)
+        if(intervalTickId){
+            clearInterval(intervalTickId)
+        }
+
+        clearTimeout(timeoutTickId);
+        try{
+            page.close();
+        }catch (e) {
+            console.warn(e);
+        }
+    };
+    
+    if(option.debug){
+         page.onConsoleMessage = function(msg, lineNum, sourceId) {
+            console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
+         };
+        
+         // page.onResourceRequested = function(request) {
+         //     console.log('Request ' + request.url);
+         // };
+         //
+         // page.onResourceReceived = function(response) {
+         //     console.log('Receive ' + response.statusText + '|' + response.contentType + '|' + response.url);
+         // };
+    }
+    
+    var checkComplete = function(){
+        return page.evaluate(function(checkCompleteJsAssert){
+            return eval(checkCompleteJsAssert);
+        },option.checkCompleteJsAssert);
+    };
+
+
+    try{
+        page.open(option.pageUrl, function (status) {
+            console.info("Status: " + status);
+            if(status !== "success") {
+                return exitPage("[ERROR]:" + 'FAIL to load the address');
+            }
+            
+            // 加载外部JS
+            // page.includeJs('https://cdn.bootcdn.net/ajax/libs/jquery/2.1.4/jquery.min.js', function() {
+            //
+            // });
+
+            var intervalTickId = setInterval(function(){
+                if(true === checkComplete()){
+                    clearInterval(intervalTickId);
+                    try{
+                        option.onComplete(page)
+                    }catch (e) {
+                        return exitPage("[ERROR]:" + e.toString());
+                    }
+
+                    return exitPage("complete !!");
+                }
+            },50);
+        });
+    }catch (e) {
+        exitPage("[ERROR]:" + e.toString())
+    }
+};
+
 exports.trim = trim;
 exports.toCamel = toCamel;
 exports.argsParser = argsParser;
+exports.capturePageElement = capturePageElement;
+exports.captureElement = captureElement;
+
