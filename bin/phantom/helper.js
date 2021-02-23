@@ -293,4 +293,5 @@ exports.captureElement = captureElement;
 exports.isArray = isArray;
 exports.isFunction = isFunction;
 exports.isPlainObject = isPlainObject;
+exports.extend = extend;
 
