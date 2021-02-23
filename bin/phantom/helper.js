@@ -114,7 +114,7 @@ var capturePageElement = function(userOption){
         }
     };
     
-    option = Object.assign(defaultOption,userOption);
+    option = extend(defaultOption,userOption);
 
     exitPage = function (msg) {
         console.info('PAGE EXIT: ' + msg)
