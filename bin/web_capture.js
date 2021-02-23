@@ -2,46 +2,40 @@
  * 
  * 页面元素，快照保存图片
  * 
+ * phantomjs [--timeout=15000] [--element=body] [--check-complete-js-assert=true] PAGE_URL OUTPUT_FILE
  * 
  * @refer https://phantomjs.org/api/command-line.html
  */
-var system = require('system');
+var helper = require('./phantom/helper.js');
 
-if (system.args.length < 2) {
-    console.info('Usage: phantomjs WEB_URL SAVE_FILE [ELEMENT_SELECTOR] [TIMEOUT] [checkCompleteJsAssert]');
+var command = helper.argsParser();
+
+var pageUrl = command.getArgs(1),
+    outputFile = command.getArgs(2,'output.png'),
+    element = command.getOption('element','body'),
+    timeout = command.getOption('timeout',15000),
+    checkCompleteJsAssert = command.getOption('checkCompleteJsAssert','true');
+
+if(!pageUrl){
+    console.error("param PAGE_URL is required");
     phantom.exit();
 }
 
-var webUrl = system.args[1],
-    saveFile = system.args[2],
-    element = system.args[3],
-    timeout = system.args[4],
-    checkCompleteJsAssert = system.args[5];
-
-// 实现页面渲染完毕的检查点，可以在网页内部做渲染完毕检测，设置标志位
-if(checkCompleteJsAssert === undefined || checkCompleteJsAssert === ""){
-    checkCompleteJsAssert = "true";
+if(!outputFile){
+    console.error("param OUTPUT_FILE is required")
+    phantom.exit();
 }
 
-if(!element){
-    element = 'body';
-}
-
-if(timeout === undefined){
-    timeout = 15000;
-}else{
-    timeout = ~~timeout;
-}
-console.info("load url:" + webUrl);
+console.info("PAGE_URL: " + pageUrl);
+console.info("OUTPUT_FILE: " + outputFile);
 
 setTimeout(function () {
     // 超时未渲染完成则退出
-    console.info("wait render timeout:" + webUrl);
+    console.info("wait render timeout:" + timeout + 'ms');
     phantom.exit();
 }, timeout);
 
 var page = require('webpage').create();
-
 page.onConsoleMessage = function(msg, lineNum, sourceId) {
     console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
 };
@@ -58,7 +52,7 @@ var checkComplete = function(){
     },checkCompleteJsAssert);
 };
 
-page.open(webUrl, function (status) {
+page.open(pageUrl, function (status) {
     console.info("Status: " + status);
     if(status !== "success") {
         console.error('FAIL to load the address');
@@ -84,7 +78,7 @@ page.open(webUrl, function (status) {
                     height: bb.height
                 };
 
-                page.render(saveFile);
+                page.render(outputFile);
             }catch (e) {
                 console.error(e.toString());
             }

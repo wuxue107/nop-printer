@@ -4,6 +4,8 @@
 
 "use strict";
 
+var system = require('system');
+
 /**
  * 去两边空格
  * @return {string}
@@ -27,6 +29,9 @@ var toCamel = function(str) {
  * 解析命令行参数
  */
 var argsParser = function(optionArgs){
+    if(optionArgs === undefined){
+        optionArgs = system.args.slice(1)
+    }
     var options = {
         args : [],
     };

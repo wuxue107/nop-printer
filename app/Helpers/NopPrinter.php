@@ -23,7 +23,7 @@ class NopPrinter extends Printer
         $imagePath = Helper::getRuntimePath('image/' . sha1(microtime(true)) .'.png');
         
 
-        $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath) . " " . ProcessUtils::escapeArgument($element);
+        $cmd = "\"$phantomjsBin\"  --disk-cache=true  \"$scriptFile\" " . ProcessUtils::escapeArgument('--element=' . $element) . " " .  ProcessUtils::escapeArgument($url) . " " . ProcessUtils::escapeArgument($imagePath);
         
         Helper::writeLog($cmd);
         shell_exec($cmd);
