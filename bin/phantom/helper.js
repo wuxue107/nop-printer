@@ -51,12 +51,8 @@ var argsParser = function(optionArgs){
             return !!ret;
         }
 
-        if(typeof defaultValue === 'number' && ~~defaultValue === defaultValue){
-            return ~~ret;
-        }
-
         if(typeof defaultValue === 'number'){
-            return ret * 1.0;
+            return ret - 0;
         }
 
         return ret;
