@@ -298,14 +298,15 @@
 
         $table.on('load-success.bs.table',function(){
             processTpl();
+
+            $('.page').each(function(){
+                var el = $(this);
+                var w = el.parent().parent();
+                w.css({height:el.height(),width:el.width()});
+            })
             setTimeout(function () {$table.resize();},500);
         });
-        
-        $('.page').each(function(){
-            var el = $(this);
-            var w = el.parent().parent();
-            w.css({height:el.height(),width:el.width()});
-        })
+
     })
 </script>
 </body>
