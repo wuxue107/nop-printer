@@ -238,6 +238,8 @@
             layer.msg(d.msg);
         });
     }
+    
+    var demoZoom = 0.5;
     columnFormatter = {
         operation: function (v, row, index) {
              return '<button onclick="deleteTpl(this);return false;"  style="margin: 5px" class="btn btn-sm btn-danger" tabindex="-1">删除</button>'
@@ -261,7 +263,7 @@
                 errorMsg = "模板示例参数错误：" + e.toString();
             }
             
-            return  '<div class="pages" style="width:'+(row.width/2)+'px"><div style="width: '+(row.width)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale(0.5,0.5);transform-origin: 0 0;">' + renderTpl(errorMsg,true,row,params,'') + '</div></div>';
+            return  '<div class="pages" style="width:'+(row.width * demoZoom)+'px"><div style="width: '+(row.width)+'px;margin: 0 auto; position: relative;border: 1px solid #666;background: white;transform: scale('+demoZoom+','+demoZoom+');transform-origin: 0 0;">' + renderTpl(errorMsg,true,row,params,'') + '</div></div>';
         }
     };
 
@@ -302,7 +304,7 @@
             $('.page').each(function(){
                 var el = $(this);
                 var w = el.parent().parent();
-                w.css({height:el.height(),width:el.width()});
+                w.css({height:el.height() * demoZoom,width:el.width() * demoZoom});
             })
             setTimeout(function () {$table.resize();},500);
         });
