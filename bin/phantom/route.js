@@ -33,7 +33,10 @@ var Routes = (function() {
         }
 
         if (typeof body == 'number') { this.statusCode = body; body = ''; }
-        else if (typeof body == 'object') body = JSON.stringify(body);
+        else if (typeof body == 'object') {
+            body = JSON.stringify(body);
+            this.header("Content-Type","application/json");
+        }
 
         this.close(body);
 
@@ -109,7 +112,7 @@ var Routes = (function() {
         this.addRoute('ALL', /.+/, handler);
     };
     R.prototype.listen = function(port) {
-        this.server.listen(port, _.bind(this.preRoute, this));
+        this.server.listen(port, {'keepAlive': false},_.bind(this.preRoute, this));
     };
 
     R.static = function(root) {

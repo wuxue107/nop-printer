@@ -130,18 +130,13 @@ var loadPage = function(userOption){
     option = extend(true,defaultOption,userOption);
 
     console.log(JSON.stringify(option));
+    
     var pageError = function (msg,code) {
-        code = code || 999;
-        if(intervalTickId){
-            clearInterval(intervalTickId)
-        }
+        code = code || 99;
 
-        if(timeoutTickId){
-            clearTimeout(timeoutTickId);
-        }
         
         option.onError(page,msg,code);
-        option.onEnd(page);
+        pageEnd(page)
     };
     
     var pageEnd = function (page) {
@@ -152,12 +147,14 @@ var loadPage = function(userOption){
         }
         
         try{
-            page.close();
+            if(page){
+                page.close();
+            }
         }catch (e) {
         }
     };
     if(!option.pageUrl){
-        return pageError("[ERROR]:" + "pageUrl is required .")
+        return pageError("[ERROR]:" + "pageUrl is required .",2)
     }
 
     page = WebPage.create();
@@ -175,7 +172,7 @@ var loadPage = function(userOption){
     timeoutTickId = setTimeout(function () {
         option.onEnd(page);
         // 超时未渲染完成则退出
-        return pageError("wait render timeout:" + option.timeout + 'ms')
+        return pageError("wait render timeout:" + option.timeout + 'ms',3)
     }, option.timeout + option.interval + 5);
     
     if(option.debug){
@@ -183,13 +180,10 @@ var loadPage = function(userOption){
             console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
          };
 
-         page.onResourceRequested = function(request) {
-             console.log('Request ' + request.url);
-         };
-
-         page.onResourceReceived = function(response) {
-             console.log('Receive ' + response.statusText + '|' + response.contentType + '|' + response.url);
-         };
+        page.onResourceError = function(resourceError) {
+            console.log('Unable to load resource (#' + resourceError.id + 'URL:' + resourceError.url + ')');
+            console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
+        };
     }
     
     var checkComplete = function(){
@@ -203,7 +197,7 @@ var loadPage = function(userOption){
         page.open(option.pageUrl, function (status) {
             console.info("Status: " + status);
             if(status !== "success") {
-                return pageError('failed to load the address');
+                return pageError('failed to load the address',4);
             }
 
             // 加载外部JS
@@ -214,12 +208,16 @@ var loadPage = function(userOption){
             var checkOk = false;
             var intervalTickId = setInterval(function(){
                 if(checkOk){
-                    clearInterval(intervalTickId);
+                    clearInterval(intervalTickId)
+                    if(timeoutTickId){
+                        clearTimeout(timeoutTickId);
+                    }
+                
                     try{
                         option.onSuccess(page);
                         pageEnd(page);
                     }catch (e) {
-                        return pageError("[ERROR]:" + e.toString());
+                        return pageError("[ERROR]:" + e.toString(),5);
                     }
                 }else{
                     checkOk = checkComplete();
@@ -227,7 +225,7 @@ var loadPage = function(userOption){
             },option.interval);
         });
     }catch (e) {
-        return pageError("[ERROR]:" + e.toString())
+        return pageError("[ERROR]:" + e.toString(),6)
     }
 };
 
