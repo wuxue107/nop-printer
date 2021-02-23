@@ -116,6 +116,7 @@ var capturePageElement = function(userOption){
     
     option = extend(defaultOption,userOption);
 
+    console.log(JSON.stringify(option));
     exitPage = function (msg) {
         console.info('PAGE EXIT: ' + msg)
         if(intervalTickId){
@@ -135,17 +136,15 @@ var capturePageElement = function(userOption){
         }
     };
     if(option.pageUrl){
-        exitPage("[ERROR]:" + "pageUrl is required .")
+        return exitPage("[ERROR]:" + "pageUrl is required .")
     }
     
     page = require('webpage').create(option.pageOption);
     timeoutTickId = setTimeout(function () {
         option.onEnd(page);
         // 超时未渲染完成则退出
-        exitPage("wait render timeout:" + option.timeout + 'ms')
+        return exitPage("wait render timeout:" + option.timeout + 'ms')
     }, option.timeout);
-
-
     
     if(option.debug){
          page.onConsoleMessage = function(msg, lineNum, sourceId) {
