@@ -33,6 +33,22 @@ class NopPrinter extends Printer
         
         return false;
     }
+
+    static function serverUrl2Image($url,$element = 'body'){
+        $res = HttpUtils::httpPostJsonApi([
+            "pageUrl" => $url,
+            "timeout"=> 3000,
+            "element"=> $element,
+            "width" =>  1152,
+            "height"=> 864
+        ]);
+        
+        if($res && isset($res['data']['image_data'])){
+            return self::dataUrl2Image($res['data']['image_data']);
+        }
+        
+        return false;
+    }
     
     static function dataUrl2Image($imageData){
         $content = @file_get_contents($imageData);
