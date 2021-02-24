@@ -115,6 +115,8 @@ var loadPage = function(userOption){
     var timeoutTickId;
     var page;
     var defaultOption = {
+        width : 10000,
+        height : 10000,
         debug : true,
         pageUrl : '',
         interval : 50,
