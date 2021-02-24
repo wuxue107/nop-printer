@@ -29,4 +29,4 @@ echo/
 echo #######################################################
 echo ############  start printer api service   ##############
 echo #######################################################
-php artisan serve --port=8077
+php artisan serve --host=0.0.0.0 --port=8077
