@@ -60,12 +60,40 @@ printer_name: 可以不传或为空，则使用默认打印机
 {"printer_name":"POS-58","image_data":"data:image/png;base64,..."}
 
 ```
+## 二维码和条形码支持
+在使用HTML或HTML模板打印时可使用class qrcode和barcode 对二维码条形码进行标记
+二维码和条形码的更多参数配置，可以通过节点data属性进行传递
+```
+示例:
+二维码： 内容： https://gitee.com/wuxue107/
+二维码的更多属性参考： https://github.com/davidshimjs/qrcodejs
+<div class="qrcode center" data-widht=128 data-height=128 data-color-light="#ffffff" data-color-dark="#000000" data-text="https://gitee.com/wuxue107/">
+条形码： 内容： nop-printer
+二维码的更多属性参考： https://lindell.me/JsBarcode/
+<div class="barcode" data-format="pharmacode" data-display-value=false data-width=4 data-height=60 data-text="nop-printer">
 
+```
 ## 使用打印HTML
 ```
 http://127.0.0.1:8077/api/job/print-html
 请求：POST-JSON:
 {"html":"<p>HELLO NOP</p>","printer_name":null}
+响应：
+{
+"code": 0,
+"msg": "操作成功",
+"data": {
+"task_id": 14
+}
+}
+```
+
+
+## 使用HTML模板打印
+```
+http://127.0.0.1:8077/api/job/print-tpl
+请求：POST-JSON:
+{"printer_name":null,"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
 响应：
 {
 "code": 0,
@@ -123,21 +151,6 @@ http://127.0.0.1:8077/api/print-tpl/delete
 "code": 0,
 "msg": "操作成功",
 "data": null
-}
-```
-
-### 使用HTML模板打印
-```
-http://127.0.0.1:8077/api/job/print-tpl
-请求：POST-JSON:
-{"printer_name":null,"tpl_name":"simple-tpl","tpl_params":{"user":"NOP"}}
-响应：
-{
-"code": 0,
-"msg": "操作成功",
-"data": {
-"task_id": 14
-}
 }
 ```
 
