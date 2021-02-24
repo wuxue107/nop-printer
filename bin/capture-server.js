@@ -24,6 +24,7 @@ app.post('/',function(request, response) {
     var option = {
         pageUrl : postParam.pageUrl,
         timeout : 9000,
+        debug : true,
         onSuccess : function(page){
             res.data = {
                 image_data : helper.captureElementToBase64(page,element)
