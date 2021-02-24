@@ -218,6 +218,10 @@ q.prototype.chain=Xo,q.prototype.commit=nf,q.prototype.next=tf,q.prototype.plant
         .qrcode.center img{
             margin: 0 auto;
         }
+
+        .barcode.center canvas{
+            margin: 0 auto;
+        }
     </style>
 
 <script type="text/javascript">
