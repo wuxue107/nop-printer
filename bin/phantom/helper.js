@@ -115,8 +115,6 @@ var loadPage = function(userOption){
     var timeoutTickId;
     var page;
     var defaultOption = {
-        width : 1000,
-        height : 1000,
         debug : true,
         pageUrl : '',
         interval : 50,
@@ -168,7 +166,10 @@ var loadPage = function(userOption){
         return pageError("wait render timeout:" + option.timeout + 'ms',3)
     }, option.timeout + option.interval + 5);
     
-    page.viewportSize = {width:option.width,height:option.height};
+    if(option.width && option.height){
+        page.viewportSize = {width:option.width,height:option.height};
+    }
+    
     page.onPageCreated = function(newPage) {
         newPage.onClosing = function(closingPage) {
             console.log('A child page is closing: ' + closingPage.url);
