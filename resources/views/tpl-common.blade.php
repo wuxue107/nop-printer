@@ -221,6 +221,7 @@ q.prototype.chain=Xo,q.prototype.commit=nf,q.prototype.next=tf,q.prototype.plant
 
         .barcode.center canvas{
             margin: 0 auto;
+            display: block;
         }
     </style>
 
