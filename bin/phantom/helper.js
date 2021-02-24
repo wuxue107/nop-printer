@@ -158,6 +158,39 @@ var loadPage = function(userOption){
     }
 
     page = WebPage.create();
+    page.onConfirm = function(msg) {
+        console.log('[CONFIRM]: ' + msg);
+        return true; // `true` === pressing the "OK" button, `false` === pressing the "Cancel" button
+    };
+    page.onPageCreated = function(newPage) {
+        newPage.onClosing = function(closingPage) {
+            console.log('A child page is closing: ' + closingPage.url);
+        };
+    };
+    page.onError = function(msg, trace) {
+
+        var msgStack = ['ERROR: ' + msg];
+
+        if (trace && trace.length) {
+            msgStack.push('TRACE:');
+            trace.forEach(function(t) {
+                msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
+            });
+        }
+
+        console.error(msgStack.join('\n'));
+    };
+    
+    if(option.debug){
+        page.onConsoleMessage = function(msg, lineNum, sourceId) {
+            console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
+        };
+
+        page.onResourceError = function(resourceError) {
+            console.log('Unable to load resource (#' + resourceError.id + 'URL:' + resourceError.url + ')');
+            console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
+        };
+    }
     page.viewportSize = {width:option.width,height:option.height};
 
     timeoutTickId = setTimeout(function () {
@@ -172,21 +205,8 @@ var loadPage = function(userOption){
     page.onAlert = function(msg) {
         console.info('[ALERT]: ' + msg);
     };
-    page.onConfirm = function(msg) {
-        console.log('[CONFIRM]: ' + msg);
-        return true; // `true` === pressing the "OK" button, `false` === pressing the "Cancel" button
-    };
-    
-    if(option.debug){
-         page.onConsoleMessage = function(msg, lineNum, sourceId) {
-            console.log("CONSOLE:["+sourceId+ ":" +lineNum+"] " + msg);
-         };
 
-        page.onResourceError = function(resourceError) {
-            console.log('Unable to load resource (#' + resourceError.id + 'URL:' + resourceError.url + ')');
-            console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
-        };
-    }
+
     
     var checkComplete = function(){
         return page.evaluate(function(checkCompleteJsAssert){
