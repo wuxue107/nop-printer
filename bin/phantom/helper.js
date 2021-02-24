@@ -46,38 +46,31 @@ var argsParser = function(optionArgs){
             index++;
         }else{
             var optionName = toCamel(matchs[1]);
-            options[optionName] = matchs[3]
+            options[optionName] = matchs[3] === undefined ? true : matchs[3];
         }
     }
-    
+
     options._transValue = function(map,name,defaultValue){
         var isBoolean = defaultValue === true || defaultValue === false;
         var ret = map[name];
-        if(isBoolean){
-            if(map.hasOwnProperty(name) && !defaultValue){
-                return true;
-            }
 
-            if(ret === "0" || ret === "false" || ret === "no"){
+        if(ret === undefined || ret === ""){
+            return defaultValue;
+        }
+
+        if(isBoolean){
+            if(ret === "0" || ret === "false" || ret === "no" || ret === undefined){
                 return false;
             }
 
             return true;
         }
 
-        if(ret === undefined && map.hasOwnProperty(name)){
-            return true;
-        }
-        
-        if(ret === undefined || ret === ""){
-            return defaultValue;
-        }
-        
         if(typeof defaultValue === 'number'){
             return ret - 0;
         }
 
-        return ret;
+        return '' + ret;
     };
     
     options.getOption = function(name,defaultValue){
