@@ -106,6 +106,8 @@ http://127.0.0.1:8077/api/job/print-tpl
 
 ## HTML打印模板管理 
 - 模板采用lodash template 模板语法
+![alt](./tpl-manager.png)
+
 ### 保存模板（模板名不存在则创建）
 ```
 http://127.0.0.1:8077/api/print-tpl/save
