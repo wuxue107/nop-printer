@@ -221,6 +221,10 @@ var loadPage = function(userOption){
         page.open(option.pageUrl, function (status) {
             console.info("Status: " + status);
             if(status !== "success") {
+                clearInterval(intervalTickId)
+                if(timeoutTickId){
+                    clearTimeout(timeoutTickId);
+                }
                 return pageError('failed to load the address',4);
             }
 
@@ -230,7 +234,7 @@ var loadPage = function(userOption){
             // });
 
             var checkOk = false;
-            var intervalTickId = setInterval(function(){
+            intervalTickId = setInterval(function(){
                 if(checkOk){
                     clearInterval(intervalTickId)
                     if(timeoutTickId){
