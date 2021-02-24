@@ -21,9 +21,10 @@ app.post('/',function(request, response) {
     var element = request.post.element || 'body';
     var res = {code : 0,msg : 'success',data : null};
     var postParam = JSON.parse(request.post);
+    var timeout = ~~postParam.timeout;
     var option = {
         pageUrl : postParam.pageUrl,
-        timeout : 9000,
+        timeout : timeout || 9000,
         debug : true,
         onSuccess : function(page){
             res.data = {
