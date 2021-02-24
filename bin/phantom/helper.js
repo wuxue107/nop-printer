@@ -159,6 +159,13 @@ var loadPage = function(userOption){
 
     page = WebPage.create();
     page.viewportSize = {width:option.width,height:option.height};
+
+    timeoutTickId = setTimeout(function () {
+        option.onEnd(page);
+        // 超时未渲染完成则退出
+        return pageError("wait render timeout:" + option.timeout + 'ms',3)
+    }, option.timeout + option.interval + 5);
+
     page.onPrompt = function(msg, defaultVal) {
         return defaultVal;
     };
@@ -169,11 +176,6 @@ var loadPage = function(userOption){
         console.log('[CONFIRM]: ' + msg);
         return true; // `true` === pressing the "OK" button, `false` === pressing the "Cancel" button
     };
-    timeoutTickId = setTimeout(function () {
-        option.onEnd(page);
-        // 超时未渲染完成则退出
-        return pageError("wait render timeout:" + option.timeout + 'ms',3)
-    }, option.timeout + option.interval + 5);
     
     if(option.debug){
          page.onConsoleMessage = function(msg, lineNum, sourceId) {
@@ -212,7 +214,7 @@ var loadPage = function(userOption){
                     if(timeoutTickId){
                         clearTimeout(timeoutTickId);
                     }
-                
+
                     try{
                         option.onSuccess(page);
                         pageEnd(page);
