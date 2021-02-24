@@ -73,7 +73,7 @@ printer_name: 可以不传或为空，则使用默认打印机
 <div class="barcode" data-format="pharmacode" data-display-value=false data-width=4 data-height=60 data-text="nop-printer">
 
 ```
-## 使用打印HTML
+## 使用HTML打印
 ```
 http://127.0.0.1:8077/api/job/print-html
 请求：POST-JSON:
