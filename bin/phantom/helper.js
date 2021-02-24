@@ -89,6 +89,7 @@ var captureElement = function (page,elementSelector) {
         height: bb.height
     };
 
+    console.info("set capture:" + JSON.stringify(page.clipRect));
     return page;
 };
 
