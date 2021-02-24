@@ -1,7 +1,23 @@
-var system = require('system'),
-    Routes = require('./phantom/route.js'),
+var Routes = require('./phantom/route.js'),
     helper = require('./phantom/helper.js'),
     app = new Routes();
+
+var command = helper.argsParser();
+var listenPort = command.getArgs('port',8078),
+    isHelper = command.getOption('help',false);
+
+if(isHelper){
+    var helpContent =
+        "    Usage : \n" +
+        "    phantomjs capture.js [--help] [--port=8078]\n" +
+        "        --help                show help information\n" +
+        "        --port=8078           listen port of web server\n" +
+        "" +
+        "";
+
+    console.log(helpContent);
+    phantom.exit();
+}
 
 app.use(function(req,res,next){
     // if(req.post.width && req.post.height){
@@ -52,6 +68,6 @@ app.post('/',function(request, response) {
     helper.loadPage(option);
 });
 
-app.listen(system.args[1] || 8078);
+app.listen(listenPort);
 
-console.log('Listening on port ' + (system.args[1] || 8078));
+console.log('Listening on port ' + listenPort);

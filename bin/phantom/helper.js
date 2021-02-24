@@ -34,7 +34,7 @@ var argsParser = function(optionArgs){
         optionArgs = require('system').args.slice(1)
     }
     var options = {
-        args : [],
+        _args : [],
     };
 
     var index = 1;
@@ -42,36 +42,50 @@ var argsParser = function(optionArgs){
         var optionArg = optionArgs[i];
         var matchs = optionArg.match(/^--([\w-]+)(=(.*))?$/);
         if(!matchs){
-            options.args[index] = optionArg;
+            options._args[index] = optionArg;
             index++;
         }else{
             var optionName = toCamel(matchs[1]);
             options[optionName] = matchs[3]
         }
     }
-    options._transValue = function(ret,defaultValue){
-        if(ret === undefined || ret === ""){
-            return defaultValue;
-        }
-        if(defaultValue === true || defaultValue === false){
+    
+    options._transValue = function(map,name,defaultValue){
+        var isBoolean = defaultValue === true || defaultValue === false;
+        var ret = map[name];
+        if(isBoolean){
+            if(map.hasOwnProperty(name) && !defaultValue){
+                return true;
+            }
+
             if(ret === "0" || ret === "false" || ret === "no"){
                 return false;
             }
+
             return true;
         }
 
+        if(ret === undefined && map.hasOwnProperty(name)){
+            return true;
+        }
+        
+        if(ret === undefined || ret === ""){
+            return defaultValue;
+        }
+        
         if(typeof defaultValue === 'number'){
             return ret - 0;
         }
 
         return ret;
     };
+    
     options.getOption = function(name,defaultValue){
-        return options._transValue(options[toCamel(name)],defaultValue);
+        return options._transValue(options,toCamel(name),defaultValue);
     };
     
     options.getArgs = function (index,defaultValue) {
-        return options._transValue(options.args[index],defaultValue);
+        return options._transValue(options._args,index,defaultValue);
     };
 
     return options;
