@@ -18,9 +18,10 @@ app.use(function(req,res,next){
 });
 
 app.post('/',function(request, response) {
-    var element = request.post.element || 'body';
-    var res = {code : 0,msg : 'success',data : null};
     var postParam = JSON.parse(request.post);
+    var element = postParam.element || 'body';
+    var res = {code : 0,msg : 'success',data : null};
+
     var timeout = ~~postParam.timeout;
     var option = {
         pageUrl : postParam.pageUrl,
