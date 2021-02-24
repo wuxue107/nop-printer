@@ -40,6 +40,7 @@ class ImagePrintJob implements ShouldQueue
     public function handle()
     {
         try{
+            echo "print image: $this->printerName | {$this->imageFile}\n";
             $printer = PrinterHelper::getPrinter($this->printerName);
             $printer->printImage($this->imageFile);
             $printer->cut();
