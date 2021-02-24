@@ -120,7 +120,7 @@ var loadPage = function(userOption){
         debug : true,
         pageUrl : '',
         interval : 50,
-        timeout : 15000,
+        timeout : 5000,
         checkCompleteJsAssert : 'true',
         onError : noop,
         onSuccess : noop, // onComplete(page)
@@ -157,18 +157,25 @@ var loadPage = function(userOption){
         return pageError("[ERROR]:" + "pageUrl is required .",2)
     }
 
+
+
+    
     page = WebPage.create();
-    page.onConfirm = function(msg) {
-        console.log('[CONFIRM]: ' + msg);
-        return true; // `true` === pressing the "OK" button, `false` === pressing the "Cancel" button
-    };
+    
+    timeoutTickId = setTimeout(function () {
+        option.onEnd(page);
+        // 超时未渲染完成则退出
+        return pageError("wait render timeout:" + option.timeout + 'ms',3)
+    }, option.timeout + option.interval + 5);
+    
+    page.viewportSize = {width:option.width,height:option.height};
     page.onPageCreated = function(newPage) {
         newPage.onClosing = function(closingPage) {
             console.log('A child page is closing: ' + closingPage.url);
         };
     };
+    
     page.onError = function(msg, trace) {
-
         var msgStack = ['ERROR: ' + msg];
 
         if (trace && trace.length) {
@@ -191,22 +198,13 @@ var loadPage = function(userOption){
             console.log('Error code: ' + resourceError.errorCode + '. Description: ' + resourceError.errorString);
         };
     }
-    page.viewportSize = {width:option.width,height:option.height};
 
-    timeoutTickId = setTimeout(function () {
-        option.onEnd(page);
-        // 超时未渲染完成则退出
-        return pageError("wait render timeout:" + option.timeout + 'ms',3)
-    }, option.timeout + option.interval + 5);
-
-    page.onPrompt = function(msg, defaultVal) {
-        return defaultVal;
-    };
-    page.onAlert = function(msg) {
-        console.info('[ALERT]: ' + msg);
-    };
-
-
+    // page.onPrompt = function(msg, defaultVal) {
+    //     return defaultVal;
+    // };
+    // page.onAlert = function(msg) {
+    //     console.info('[ALERT]: ' + msg);
+    // };
     
     var checkComplete = function(){
         return page.evaluate(function(checkCompleteJsAssert){
