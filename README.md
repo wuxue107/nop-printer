@@ -33,6 +33,10 @@
 ```
 GET http://localhost:8077/api/printer/get-local-printers
 ```
+- 获取现有打印机配置
+```$xslt
+GET http://localhost:8077/api/printer/get-config
+```
 
 - 配置添加的小票打印机
 ```$xslt
