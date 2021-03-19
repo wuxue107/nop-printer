@@ -304,9 +304,12 @@
             $('.page').each(function(){
                 var el = $(this);
                 var w = el.parent().parent();
-                w.css({height:el.height() * demoZoom + 50,width:el.width() * demoZoom});
-            })
-            setTimeout(function () {$table.resize();},2000);
+                setTimeout(function () {
+                    // 模板中可能有二维码/条码会延后渲染完成
+                    w.css({height:el.height() * demoZoom + 50,width:el.width() * demoZoom});
+                },800)
+            });
+            setTimeout(function () {$table.resize();},1200);
         });
 
     })
