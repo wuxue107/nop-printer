@@ -56,7 +56,9 @@ class HtmlPrintJob implements ShouldQueue
             $url = "http://127.0.0.1:8077/tpl-html?job_key={$key}";
             echo "page url: $url";
             \Cache::set($key,$data,3600);
+            //$image = NopPrinter::serverUrl2Image($url);
             $image = NopPrinter::url2Image($url);
+            \Cache::delete($key);
             echo " => {$image}\n";
             if($image){
                 dispatch(new ImagePrintJob($image,$this->printerName));

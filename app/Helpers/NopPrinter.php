@@ -35,9 +35,9 @@ class NopPrinter extends Printer
     }
 
     static function serverUrl2Image($url,$element = 'body'){
-        $res = HttpUtils::httpPostJsonApi([
+        $res = HttpUtils::httpPostJsonApi('http://localhost:8087/',[
             "pageUrl" => $url,
-            "timeout"=> 3000,
+            "timeout"=> 10000,
             "element"=> $element,
             "width" =>  1152,
             "height"=> 864

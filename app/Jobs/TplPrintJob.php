@@ -67,6 +67,7 @@ class TplPrintJob implements ShouldQueue
             echo "page url: $url";
             \Cache::set($key,$data,3600);
             $image = NopPrinter::url2Image($url);
+            \Cache::delete($key);
             echo " => {$image}\n";
 
             if($image){

@@ -45,6 +45,7 @@ class ImagePrintJob implements ShouldQueue
             $printer->printImage($this->imageFile);
             $printer->cut();
             $printer->close();
+            @unlink($this->imageFile);
         }catch(\Throwable $e){
             $this->fail($e);
         }
