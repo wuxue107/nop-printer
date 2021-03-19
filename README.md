@@ -160,19 +160,6 @@ http://127.0.0.1:8077/api/print-tpl/delete
 }
 ```
 
-## 清理打印缓存
-```$xslt
-POST http://localhost:8077/api/printer/clear-cache
-参数：JSON
-{}
-响应：
-{
-"code": 0,
-"msg": "操作成功",
-"data": null
-}
-```
-
 ## 启动服务
     运行:printer-start.bat
 

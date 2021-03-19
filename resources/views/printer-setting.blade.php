@@ -53,7 +53,7 @@
                     <a class="btn btn-outline btn-success new-tab" target="_blank" href="/tpl-manager">
                         打印模板管理
                     </a>
-                    <button id="clearCacheBtn" class="btn btn-outline btn-success">
+                    <button id="clearCacheBtn" class="hidden btn btn-outline btn-success">
                         清理缓存
                     </button>
                 </div>

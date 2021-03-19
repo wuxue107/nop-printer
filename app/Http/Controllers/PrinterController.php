@@ -116,8 +116,8 @@ class PrinterController extends Controller
     }
 
     public function clearCache(){
-        chdir(base_path());
-        shell_exec("cmd /c clear_cache.bat");
+        //chdir(base_path());
+        //shell_exec("cmd /c clear_cache.bat");
         
         return Helper::successMsg();
     }
