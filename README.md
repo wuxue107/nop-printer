@@ -1,5 +1,5 @@
 # 用于小票打印，目前适用于Window（Windows 7、Windows 10）
-    是一个小票打印的Api服务，使用php的mike42/escpos-php库。
+    是使用php laravel搭建的一个小票打印的Api服务，使用php的mike42/escpos-php库。
     内容部包含一个独立解压版的php7.3.4,不需另行安装php环境
 
 # 使用方法
