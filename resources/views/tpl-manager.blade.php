@@ -306,7 +306,7 @@
                 var w = el.parent().parent();
                 w.css({height:el.height() * demoZoom + 50,width:el.width() * demoZoom});
             })
-            setTimeout(function () {$table.resize();},1000);
+            setTimeout(function () {$table.resize();},1500);
         });
 
     })
