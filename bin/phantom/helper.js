@@ -7,6 +7,9 @@
 
 var WebPage = require('webpage');
 
+
+var noop = function () {};
+
 /**
  * 去两边空格
  * @return {string}
@@ -84,37 +87,108 @@ var argsParser = function(optionArgs){
     return options;
 };
 
-var captureElement = function (page,elementSelector) {
+
+var getElementRect = function(page,elementSelector){
     var bb = page.evaluate(function (elementSelector) {
         return document.querySelector(elementSelector).getBoundingClientRect();
     },elementSelector);
-    // 按照实际页面的高度，设定渲染的宽高
-    page.clipRect = {
+
+    return {
         top:    bb.top,
         left:   bb.left,
         width:  bb.width,
         height: bb.height
-    };
-
-    console.info("set capture:" + JSON.stringify(page.clipRect));
-    return page;
+    }
 };
 
-var captureElementToFile = function (page,elementSelector,outputFile) {
-    var oldRect = page.clipRect;
-    captureElement(page,elementSelector).render(outputFile);
-    page.clipRect = oldRect;
-    return require('fs').exists(path);
-};
+/**
+ * 
+ * @param page
+ * @param elementSelectors
+ * @returns object 
+ * PS: {
+ *     count : 1,
+ *     rects : {
+ *         "body" : [
+ *             {
+ *                 top:    0,
+ *                 left:   0,
+ *                 width:  600,
+ *                 height: 800
+ *             }
+ *         ]
+ *     }
+ * }
+ */
+var getElementsRect = function(page,elementSelectors){
+    if(!isArray(elementSelectors)){
+        elementSelectors = [elementSelectors]
+    }
+    var ret = page.evaluate(function (elementSelectors) {
+        var rects = {};
+        var count = 0;
+        for(var i in elementSelectors){
+            var selector = elementSelectors[i];
+            rects[selector] = [];
+            var nodes = document.querySelectorAll(selector);
+            count += nodes.length;
+            nodes.forEach(function(v){
+                var bb = v.getBoundingClientRect();
+                rects[selector].push({
+                    top:    bb.top,
+                    left:   bb.left,
+                    width:  bb.width,
+                    height: bb.height
+                });
+            })
+        }
 
-var captureElementToBase64 = function (page,elementSelector) {
-    var oldRect = page.clipRect;
-    var ret = 'data:image/png;base64,' + captureElement(page,elementSelector).renderBase64('png');
-    page.clipRect = oldRect;
+        return {
+            rects : rects,
+            count : count
+        };
+    },elementSelectors);
+
     return ret;
 };
 
-var noop = function () {};
+var captureRectToFile = function(page,rect,outputFile){
+    var oldRect = page.clipRect;
+    page.clipRect = rect;
+    page.render(outputFile);
+    page.clipRect = oldRect;
+    return require('fs').exists(outputFile);
+};
+
+var captureRectToBase64 = function(page,rect){
+    var oldRect = page.clipRect;
+    page.clipRect = rect;
+    var base64Str = page.renderBase64('png');
+    page.clipRect = oldRect;
+    if(!base64Str){
+        return false;
+    }
+    return 'data:image/png;base64,' + base64Str;
+};
+
+var captureElementToFile = function (page,elementSelector,outputFile) {
+    return captureRectToFile(page,getElementRect(page,elementSelector),outputFile);
+};
+
+var captureElementToBase64 = function (page,elementSelector) {
+    return captureRectToBase64(page,getElementRect(page,elementSelector));
+};
+
+var captureElementsToBase64Callback = function (page, elementSelectors,callBack) {
+    var rets = getElementsRect(page,elementSelectors);
+    for(var selector in rets.rects){
+        var selectorRects = rets.rects[selector];
+        for(var i = 0;i < selectorRects.length;i++){
+            var imageBase64 = captureRectToBase64(page,selectorRects[i]);
+            callBack(imageBase64,selector);
+        }
+    }
+};
 
 
 var loadPage = function(userOption){
@@ -344,12 +418,13 @@ var extend = function() {
 };
 
 exports.trim = trim;
+exports.noop = noop;
 exports.toCamel = toCamel;
 exports.argsParser = argsParser;
-exports.captureElement = captureElement;
 exports.captureElementToBase64 = captureElementToBase64;
 exports.captureElementToFile = captureElementToFile;
 exports.isArray = isArray;
+exports.captureElementsToBase64Callback = captureElementsToBase64Callback;
 exports.isFunction = isFunction;
 exports.extend = extend;
 exports.loadPage = loadPage;
