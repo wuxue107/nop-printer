@@ -15,6 +15,8 @@ var pageUrl = command.getArgs(1),
     outputFile = command.getArgs(2,'output.png'),
     element = command.getOption('element','body'),
     timeout = command.getOption('timeout',15000),
+    width = command.getOption('width',1024),
+    height = command.getOption('height',768),
     isHelper = command.getOption('help',false),
     checkCompleteJsAssert = command.getOption('checkCompleteJsAssert','true');
 
@@ -25,6 +27,8 @@ if(isHelper){
         "        --help                show help information\n" +
         "        --timeout=15000       program execute timeout ,will exit. default 15000 microsecond.\n" +
         "        --element=body        capture one html element to image, css selector for querySelector\n" +
+        "        --width=1920          page viewport width size \n" +
+        "        --height=1080          page viewport width size \n" +
         "        --check-complete-js-assert=true\n" +
         "                              a javascript expression, run with page document environment\n" +
         "                              begin render image when expression value is return true\n" +
@@ -53,6 +57,8 @@ console.info("OUTPUT_FILE: " + outputFile);
 
 var ret = 0;
 helper.loadPage({
+    width : width,
+    height : height,
     pageUrl : pageUrl,
     timeout : timeout,
     checkCompleteJsAssert : checkCompleteJsAssert,
