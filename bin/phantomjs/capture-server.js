@@ -1,5 +1,5 @@
-var Routes = require('./phantom/route.js'),
-    helper = require('./phantom/helper.js'),
+var Routes = require('./lib/route.js'),
+    helper = require('./lib/helper.js'),
     app = new Routes();
 
 var command = helper.argsParser();

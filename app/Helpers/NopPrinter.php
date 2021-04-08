@@ -18,7 +18,7 @@ class NopPrinter extends Printer
     
     static function url2Image($url,$element = 'body'){
         $phantomjsBin = base_path('archive\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe');
-        $scriptFile = base_path('bin\\web_capture.js');
+        $scriptFile = base_path('bin\\phantomjs\\web_capture.js');
 
         $imagePath = Helper::getRuntimePath('image/' . sha1(microtime(true)) .'.png');
         

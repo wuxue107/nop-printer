@@ -1,5 +1,5 @@
 var system = require('system');
-var helper = require('./phantom/helper.js');
+var helper = require('./lib/helper.js');
 
 var command = helper.argsParser(system.args.slice(1));
 

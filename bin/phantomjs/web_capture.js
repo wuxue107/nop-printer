@@ -6,7 +6,7 @@
  * 
  * @refer https://phantomjs.org/api/command-line.html
  */
-var helper = require('./phantom/helper.js');
+var helper = require('./lib/helper.js');
 
 var command = helper.argsParser();
 
